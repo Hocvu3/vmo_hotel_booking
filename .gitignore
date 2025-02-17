@@ -1,0 +1,17 @@
+# Bỏ qua thư mục node_modules
+node_modules/
+
+# Bỏ qua file môi trường chứa thông tin nhạy cảm
+.env
+
+# Bỏ qua file log
+*.log
+
+# Bỏ qua cache của VSCode, MacOS, Linux
+.vscode/
+.DS_Store
+.idea/
+*.swp
+
+# Bỏ qua file cơ sở
+*.sql
