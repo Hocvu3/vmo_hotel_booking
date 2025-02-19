@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
-app.use(express.json()); // Thêm dòng này để parse JSON body
+app.use(express.json()); // parser JSON request
 
-const userRouter = require("./routes/userRoute");
+const userRouter = require("./routes/user.route");
 
 app.use("/api/v1/users", userRouter);
 
