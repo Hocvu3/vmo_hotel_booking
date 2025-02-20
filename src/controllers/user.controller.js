@@ -1,5 +1,5 @@
-// controllers/userController.js
-const User = require("../models/user.model"); // Import model User
+const db = require('../models/db');
+const { User } = db;
 
 // Hàm thêm người dùng
 exports.addUsers = async (req, res) => {
@@ -7,11 +7,11 @@ exports.addUsers = async (req, res) => {
     await User.bulkCreate(
       [
         {
-          name: "Michadel Jackson Johnson",
-          email: "michaedl.johnson@example.com",
-          password: "password789",
-          passwordConfirm: "password789",
-          role: "employee",
+          name: 'Michadel Jackson Johnson',
+          email: 'michaedl.johnson@example.com',
+          password: 'password789',
+          passwordConfirm: 'password789',
+          role: 'employee',
         },
       ],
       {
@@ -19,9 +19,9 @@ exports.addUsers = async (req, res) => {
       }
     );
 
-    res.status(201).send("Users have been added to the database!");
+    res.status(201).send('Users have been added to the database!');
   } catch (error) {
-    res.status(500).send("Error adding users: " + error.message);
+    res.status(500).send('Error adding users: ' + error.message);
   }
 };
 
@@ -31,7 +31,7 @@ exports.getUsers = async (req, res) => {
     const users = await User.findAll();
     res.status(200).json(users);
   } catch (error) {
-    res.status(500).send("Error fetching users: " + error.message);
+    res.status(500).send('Error fetching users: ' + error.message);
   }
 };
 
@@ -40,8 +40,8 @@ exports.deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
     await User.destroy({ where: { id } });
-    res.status(200).send("User deleted successfully!");
+    res.status(200).send('User deleted successfully!');
   } catch (error) {
-    res.status(500).send("Error deleting user: " + error.message);
+    res.status(500).send('Error deleting user: ' + error.message);
   }
 };
