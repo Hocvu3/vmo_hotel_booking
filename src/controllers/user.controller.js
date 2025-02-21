@@ -1,7 +1,8 @@
 const db = require('../models/db');
+const appError = require('../utils/appError');
 const { User } = db;
 
-// Hàm thêm người dùng
+// Add users
 const addUsers = async (req, res) => {
   try {
     await User.bulkCreate(
@@ -15,7 +16,7 @@ const addUsers = async (req, res) => {
         },
       ],
       {
-        individualHooks: true, //Kích hoạt hooks để hash password
+        individualHooks: true, // Active hook
       }
     );
 
@@ -25,17 +26,62 @@ const addUsers = async (req, res) => {
   }
 };
 
-// ham lay danh sach nguoi dung
+// get users
 const getUsers = async (req, res) => {
   try {
     const users = await User.findAll();
-    res.status(200).json(users);
+    res.status(200).json({
+      status: 'succes',
+      data: {
+        data: users,
+      },
+    });
   } catch (error) {
     res.status(500).send('Error fetching users: ' + error.message);
   }
 };
 
-// ham xoa nguoi dung
+// Get user
+const getUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ where: { id: req.params.id } });
+    if (!user) {
+      res.status(404).send('User not found');
+    } else {
+      res.status(200).json({
+        status: 'success',
+        data: {
+          data: user,
+        },
+      });
+    }
+  } catch (error) {
+    res.status(500).send('Error fetching user: ' + error.message);
+  }
+};
+
+// Update user
+const updateUser = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id);
+    if (!user) {
+      return next(appError('User not fount', 404));
+    }
+    //Find user with id
+    await user.update(req.body);
+
+    res.status(200).json({
+      status: 'success',
+      data: {
+        data: user,
+      },
+    });
+  } catch (error) {
+    res.status(500).send('Error updating user: ' + error.message);
+  }
+};
+
+// delete users
 const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -50,4 +96,6 @@ module.exports = {
   addUsers,
   getUsers,
   deleteUser,
+  getUser,
+  updateUser,
 };
