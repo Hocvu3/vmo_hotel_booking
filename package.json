@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon server.js",
     "dev": "nodemon server.js",
-    "eslint": "eslint path/to/src",
+    "eslint": "eslint .",
     "format": "prettier --write .",
     "prepare": "husky",
     "lint-staged": "lint-staged",
@@ -38,7 +38,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "npm run lint",
+      "eslint --fix",
       "npm run format",
       "git add ."
     ]
