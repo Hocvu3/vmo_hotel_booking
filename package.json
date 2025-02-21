@@ -10,7 +10,7 @@
     "format": "prettier --write .",
     "prepare": "husky",
     "lint-staged": "lint-staged",
-    "lint": "eslint ."
+    "lint": "eslint --fix"
   },
   "author": "hocvu",
   "license": "ISC",

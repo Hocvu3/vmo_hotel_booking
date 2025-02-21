@@ -1,9 +1,10 @@
 const express = require('express');
 const userController = require('../controllers/user.controller');
 const authController = require('../controllers/auth.controller');
+const { validateLogin } = require('../validators/auth.validator');
 const userRouter = express.Router();
 
-userRouter.post('/login', authController.login);
+userRouter.post('/login', validateLogin, authController.login);
 userRouter.post('/logout', authController.logout);
 
 userRouter.get('/add-user', userController.addUsers);
