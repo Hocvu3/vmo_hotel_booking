@@ -1,8 +1,7 @@
-const express = require('express');
 const app = require('./app');
+const env = require('./src/config/env');
 const { Sequelize } = require('sequelize');
 const sequelize = require('./src/config/db');
-require('dotenv').config();
 
 // check connection
 sequelize
@@ -19,9 +18,7 @@ sequelize
   });
 
 // start server
-const port = process.env.PORT || 3000;
+const port = env.PORT || 3000;
 app.listen(port, () => {
   console.log('Server running on port 3000!');
 });
-
-module.exports = sequelize;

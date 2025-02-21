@@ -1,6 +1,6 @@
+const Room = require('./room.model');
 const sequelize = require('../config/db');
 const { Sequelize, DataTypes } = require('sequelize');
-
 const Category = sequelize.define(
   'category',
   {
@@ -21,5 +21,9 @@ const Category = sequelize.define(
     timestamps: true,
   }
 );
+
+//Relationship
+Category.hasMany(Room);
+Room.belongsTo(Category);
 
 module.exports = Category;

@@ -1,7 +1,10 @@
-const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 const validate = require('validator');
+const Review = require('./review.model');
+const Salary = require('./salary.model');
 const sequelize = require('../config/db');
+const Booking = require('./booking.model');
 const { Sequelize, DataTypes } = require('sequelize');
 
 const User = sequelize.define(
@@ -81,6 +84,16 @@ const User = sequelize.define(
     },
   }
 );
+
+// Relationship
+User.hasMany(Booking, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+Booking.belongsTo(User, { foreignKey: 'user_id' });
+
+User.hasOne(Salary, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+Salary.belongsTo(User, { foreignKey: 'user_id' });
+
+User.hasMany(Review, { foreignKey: 'user_id' });
+Review.belongsTo(User);
 
 // Check password
 User.prototype.correctPassword = async function (candidatePassword) {
