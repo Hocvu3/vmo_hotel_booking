@@ -1,0 +1,121 @@
+extends ../layouts/main.pug
+
+block content
+    .container.my-4
+      .row
+        .col-md-8
+          .card.mb-4
+            img.card-img-top(src=(room.images && room.images.length > 0) ? room.images[0].image_url : '/img/default.png', alt=room.name)
+            .card-body
+              .d-flex.align-items-center.mb-2
+                h2.card-title.mb-0= room.name
+                .hotel-rating.ms-3
+                  i.fas.fa-star
+                  i.fas.fa-star
+                  i.fas.fa-star
+                  i.fas.fa-star
+                  i.fas.fa-star
+              p.text-muted Kalyani Nagar, Pune | 3.3 kms from city center
+              p.card-text
+                A= room.description
+              ul.list-unstyled
+                li.mb-2
+                  i.fas.fa-utensils.me-2
+                  | Experience the pinnacle of elegance in our beautifully designed rooms with stunning cityscape views.
+                li.mb-2
+                  i.fas.fa-spa.me-2
+                  | Indulge in gastronomic delights at our in-house restaurants, featuring local and international cuisines.
+                li.mb-2
+                  i.fas.fa-map-marker-alt.me-2
+                  | Located in the heart of the city, our hotel is the ideal base for both leisure and business travelers.
+              p.text-success
+                i.fas.fa-check-circle.me-2
+                | Free cancellation | No prepayment needed – pay at the property
+
+          .card
+            .card-body
+              .d-flex.justify-content-between.align-items-center.mb-4
+                h3 User Reviews
+                button.btn.btn-primary Write a Review
+              .mb-4
+                h4 Overall Rating: 3.5/5
+                p.text-muted Based on 15 reviews
+
+                .mb-2
+                  span.review-count 5 
+                  .progress.review-progress
+                    .progress-bar.review-progress-bar(style="width: 20%")
+                  span.review-count.ms-2 3
+                .mb-2
+                  span.review-count 4 
+                  .progress.review-progress
+                    .progress-bar.review-progress-bar(style="width: 40%")
+                  span.review-count.ms-2 6
+                .mb-2
+                  span.review-count 3 
+                  .progress.review-progress
+                    .progress-bar.review-progress-bar(style="width: 60%")
+                  span.review-count.ms-2 9
+                .mb-2
+                  span.review-count 2 
+                  .progress.review-progress
+                    .progress-bar.review-progress-bar(style="width: 80%")
+                  span.review-count.ms-2 12
+                .mb-2
+                  span.review-count 1 
+                  .progress.review-progress
+                    .progress-bar.review-progress-bar(style="width: 100%")
+                  span.review-count.ms-2 15
+
+              .user-review
+                .d-flex.align-items-center.mb-2
+                  .user-avatar.me-2
+                    i.fas.fa-user
+                  .d-flex.flex-column
+                    h5.mb-0 Rahul Patel
+                    small.text-muted Date of stay: 2021-01-01
+                  .hotel-rating.ms-auto
+                    i.fas.fa-star
+                    i.fas.fa-star
+                    i.fas.fa-star
+                    i.fas.fa-star
+                    i.fas.fa-star
+                p
+                  The hotel is very good and the staff is very friendly. The food is also very good.
+
+        .col-md-4
+          .card
+            .card-header.bg-primary.text-white
+              h4 Booking Details
+            .card-body
+              .mb-3
+                h5 Total Price
+                h4.text-primary 22,302 INR
+                small.text-success Free cancellation 1 day prior to stay
+              .mb-3
+                h5 Dates & Time
+                input.form-control.mb-2(type="date" value="2025-02-23")
+                input.form-control(type="text" value="Check-out" readonly)
+              .mb-3
+                h5 Reservation
+                select.form-select.mb-2
+                  option 1 room
+                  option 2 rooms
+                  option 3 rooms
+                select.form-select
+                  option 2 guests
+                  option 3 guests
+                  option 4 guests
+              .mb-3
+                h5 Room Type
+                select.form-select
+                  option 1 King Bed Standard Non Smoking
+              .mb-3
+                h5 Per day rate
+                p.mb-0 18,900 INR
+              .mb-4
+                h5 Taxes
+                p.mb-0 3,402 INR
+                small.text-muted GST - 12% on INR 0 - 2,500, 12% on INR 2,500-7,500, 18% on INR 7,500 and above
+
+              button.btn.btn-warning.w-100 Confirm Booking

@@ -1,99 +1,78 @@
-const { where, Model } = require('sequelize');
-const Room = require('../models/db');
-const appError = require('../utils/appError');
-
+const { Room } = require('../models/db');
+const apiResponse = require('../utils/apiResponse');
 //Get rooms
-const getRooms = async (req, res) => {
+const index = async (req, res) => {
   try {
     const rooms = await Room.findAll();
-    res.status(200).json({
-      status: 'success',
-      data: {
-        data: rooms,
-      },
-    });
+    return apiResponse(res, 200, 'Success', rooms);
   } catch (error) {
-    res.status(500).send('Error fetching rooms: ' + error.message);
+    return apiResponse(res, 500, 'Error fetching rooms', {
+      error: error.message,
+    });
   }
 };
 
 //Get room
-const getRoom = async (req, res) => {
+const show = async (req, res) => {
   try {
-    const room = Room.findOne({ where: { id: req.params.id } });
+    const room = await Room.findOne({ where: { id: req.params.id } });
     if (room) {
-      res.status(200).json({
-        status: 'success',
-        data: {
-          data: room,
-        },
-      });
+      return apiResponse(res, 200, 'Success', room);
     } else {
-      res.status(404).send('User not found');
+      return apiResponse(res, 404, 'Room not found');
     }
   } catch (error) {
-    res.status(500).send('Error fetching room: ' + error.message);
+    return apiResponse(res, 500, 'Error fetching room', {
+      error: error.message,
+    });
   }
 };
 
 //Add room
-const addRoom = async (req, res) => {
+const store = async (req, res) => {
   try {
     // check is empty
     if (!req.body) {
-      return res.status(400).json({ message: 'Request body is empty.' });
+      return apiResponse(res, 400, 'Request body can not be empty');
     }
-
     // create
     const newRoom = await Room.create(req.body);
-
-    return res.status(201).json({
-      status: 'success',
-      data: newRoom,
-    });
+    return apiResponse(res, 201, 'Added new room successfully', newRoom);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: 'Internal Server Error', error: error.message });
+    return apiResponse(res, 500, 'Server error', { error: error.message });
   }
 };
 
 //Update room
-const updateRoom = async (req, res) => {
+const update = async (req, res) => {
   try {
     const room = await Room.findByPk(req.params.id);
     if (!room) {
-      return next(appError('Room not fount', 404));
+      return apiResponse(res, 404, 'Room not found');
     }
     //Find user with id
     await room.update(req.body);
-
-    res.status(200).json({
-      status: 'success',
-      data: {
-        data: room,
-      },
-    });
+    return apiResponse(res, 204, 'Updated successfully');
   } catch (error) {
-    res.status(500).send('Error updating room: ' + error.message);
+    return apiResponse(res, 500, 'Server error', { error: error.message });
   }
 };
 
 //Delete room
-const deleteRoom = async (req, res) => {
+const destroy = async (req, res) => {
   try {
     const { id } = req.params;
     await Room.destroy({ where: { id } });
-    res.status(200).send('Room deleted successfully!');
+    return apiResponse(res, 204, 'Room deleted');
   } catch (error) {
-    res.status(500).send('Error deleting room: ' + error.message);
+    return apiResponse(res, 500, 'Server error', { error: error.message });
   }
 };
 
 module.exports = {
-  getRooms,
-  getRoom,
-  updateRoom,
-  addRoom,
-  deleteRoom,
+  index,
+  show,
+  update,
+  store,
+  destroy,
 };
