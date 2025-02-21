@@ -1,19 +1,16 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-app.use(express.json()); // Thêm dòng này để parse JSON body
+const userRouter = require('./src/routes/user.route');
+const errorHandler = require('./src/middlewares/error.middleware');
 
-const userRouter = require("./routes/userRoute");
+// Body parser
+app.use(express.json());
 
-app.use("/api/v1/users", userRouter);
+// Put all routes here
+app.use('/api/v1/users', userRouter);
 
-app.use((err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
-    err.status = err.status || 'error';
-  
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message
-    });
-  });
-  
+// Put all middlewares after router
+// Error handling middleware
+app.use(errorHandler);
+
 module.exports = app;
