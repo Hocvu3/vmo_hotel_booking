@@ -1,6 +1,6 @@
 const sequelize = require('../config/db');
 const { Sequelize, DataTypes } = require('sequelize');
-
+const Booking_Discount = require('./booking_discount.model');
 const Discount = sequelize.define(
   'discount',
   {
@@ -23,5 +23,9 @@ const Discount = sequelize.define(
     timestamps: true,
   }
 );
+
+// Relationship
+Discount.hasMany(Booking_Discount);
+Booking_Discount.belongsTo(Discount);
 
 module.exports = Discount;

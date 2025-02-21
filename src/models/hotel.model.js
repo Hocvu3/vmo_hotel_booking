@@ -1,6 +1,6 @@
 const sequelize = require('../config/db');
 const { Sequelize, DataTypes } = require('sequelize');
-
+const Room = require('./room.model');
 const Hotel = sequelize.define(
   'hotel',
   {
@@ -32,5 +32,9 @@ const Hotel = sequelize.define(
     timestamps: true,
   }
 );
+
+// Relationship
+Hotel.hasMany(Room, { foreignKey: 'hotel_id', onDelete: 'CASCADE' });
+Room.belongsTo(Hotel, { foreignKey: 'hotel_id' });
 
 module.exports = Hotel;
