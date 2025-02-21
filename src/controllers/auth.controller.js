@@ -32,13 +32,9 @@ const createSendToken = (user, statusCode, res) => {
 };
 
 // Login
-exports.login = async (req, res, next) => {
+const login = async (req, res, next) => {
   const { email, password } = req.body;
 
-  //check if email exists and password is correct
-  if (!email || !password) {
-    return next(new appError('Please provide email and password!', 400));
-  }
   //find user
   const user = await User.findOne({ where: { email } });
 
@@ -52,7 +48,7 @@ exports.login = async (req, res, next) => {
 };
 
 // Logout
-exports.logout = (req, res) => {
+const logout = (req, res) => {
   res.cookie('jwt', '', {
     expires: new Date(0),
     httpOnly: true,
@@ -61,4 +57,9 @@ exports.logout = (req, res) => {
     status: 'success',
     message: 'Logged out successfully',
   });
+};
+
+module.exports = {
+  login,
+  logout,
 };

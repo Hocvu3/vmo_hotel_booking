@@ -18,12 +18,6 @@ const Discount = require('./discount.model');
 const Booking_Service = require('./booking_service.model');
 const Booking_Discount = require('./booking_discount.model');
 
-// Import associations file
-const defineAssociations = require('./associations');
-
-// Call association function
-defineAssociations();
-
 const db = {
   sequelize,
   User,

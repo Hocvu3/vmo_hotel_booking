@@ -2,7 +2,7 @@ const db = require('../models/db');
 const { User } = db;
 
 // Hàm thêm người dùng
-exports.addUsers = async (req, res) => {
+const addUsers = async (req, res) => {
   try {
     await User.bulkCreate(
       [
@@ -26,7 +26,7 @@ exports.addUsers = async (req, res) => {
 };
 
 // ham lay danh sach nguoi dung
-exports.getUsers = async (req, res) => {
+const getUsers = async (req, res) => {
   try {
     const users = await User.findAll();
     res.status(200).json(users);
@@ -36,7 +36,7 @@ exports.getUsers = async (req, res) => {
 };
 
 // ham xoa nguoi dung
-exports.deleteUser = async (req, res) => {
+const deleteUser = async (req, res) => {
   try {
     const { id } = req.params;
     await User.destroy({ where: { id } });
@@ -44,4 +44,10 @@ exports.deleteUser = async (req, res) => {
   } catch (error) {
     res.status(500).send('Error deleting user: ' + error.message);
   }
+};
+
+module.exports = {
+  addUsers,
+  getUsers,
+  deleteUser,
 };
