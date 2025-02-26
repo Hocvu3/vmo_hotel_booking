@@ -1,0 +1,602 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+.header {
+  background-color: #0d47a1;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 8px 12px;
+  transition: opacity 0.3s;
+}
+
+.nav-link:hover {
+  opacity: 0.8;
+}
+
+.language-selector {
+  position: relative;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.language-btn {
+  color: white;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.language-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.flag {
+  width: 24px;
+  height: 16px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.language-options {
+  display: none;
+  position: absolute;
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  z-index: 1;
+  margin-top: 5px;
+}
+
+.language-selector:hover .language-options {
+  display: block;
+}
+
+.language-option {
+  color: #333;
+  padding: 12px 15px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.language-option:hover {
+  background-color: #f5f5f5;
+}
+
+.divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 0;
+}
+
+.divider {
+  height: 1px;
+  background-color: #eee;
+  margin: 0;
+}
+
+.navbar {
+  background-color: #0d47a1;
+  padding: 15px 0;
+}
+
+.navbar-brand {
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.nav-link {
+  color: white !important;
+}
+
+.hero-section {
+  background-color: #0d47a1;
+  color: white;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.search-box {
+  background: white;
+  padding: 15px;
+  border-radius: 5px;
+  margin: 20px auto;
+  max-width: 1000px;
+}
+
+.search-button {
+  background-color: #daa520;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+}
+
+.destination-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+  margin: 10px;
+  text-align: center;
+}
+
+.destination-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+}
+
+.hotel-card {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.hotel-image {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.star-rating {
+  background: #0d47a1;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+.book-now {
+  background-color: #daa520;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 3px;
+}
+
+.feature-check {
+  color: #28a745;
+}
+
+/* Updated footer styles with blue background */
+.footer {
+  background-color: #0d47a1;
+  padding: 50px 0 0 0;
+  color: white;
+  margin-top: 50px;
+}
+
+.footer h5 {
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.footer ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer ul li {
+  margin-bottom: 10px;
+}
+
+.footer ul li a {
+  color: white;
+  text-decoration: none;
+  opacity: 0.8;
+}
+
+.footer ul li a:hover {
+  opacity: 1;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding: 20px 0;
+  color: white;
+  font-size: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 30px;
+}
+
+.subscribe-btn {
+  border-radius: 5px;
+  background-color: white;
+  color: #0d47a1;
+  border: none;
+  padding: 8px 20px;
+  font-weight: bold;
+}
+
+.footer p {
+  color: white;
+  opacity: 0.8;
+}
+
+:root {
+  --staybooker-blue: #0d47a1;
+  --sidebar-width: 280px;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+  color: white !important;
+}
+
+.nav-link {
+  color: white !important;
+}
+
+.bg-primary {
+  background-color: var(--staybooker-blue) !important;
+}
+
+.text-primary {
+  color: var(--staybooker-blue) !important;
+}
+
+.btn-primary {
+  background-color: var(--staybooker-blue) !important;
+  border-color: var(--staybooker-blue) !important;
+}
+
+.booking-details {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.hotel-rating {
+  color: #ffc107;
+}
+
+.review-progress {
+  height: 20px;
+  background-color: #e9ecef;
+}
+
+.review-progress-bar {
+  background-color: #ffc107;
+}
+
+.review-count {
+  width: 30px;
+  display: inline-block;
+}
+
+.user-review {
+  border-bottom: 1px solid #dee2e6;
+  padding: 15px 0;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #e9ecef;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 450px;
+  padding: 2rem;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-title {
+  color: #0d47a1;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.login-subtitle {
+  color: #666;
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 14px;
+}
+
+.form-control {
+  background-color: #f0f0f0;
+  border: none;
+  padding: 12px;
+  /* margin-bottom: 15px; */
+}
+
+.login-btn {
+  background-color: #0d47a1;
+  color: white;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.forgot-password {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.forgot-password a {
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.divider {
+  text-align: center;
+  margin: 20px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.create-account {
+  text-align: center;
+}
+
+.create-account a {
+  color: #0d47a1;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register-card {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+.register-title {
+  color: #0d47a1;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.register-subtitle {
+  color: #666;
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 14px;
+}
+
+.form-control {
+  background-color: #f0f0f0;
+  border: none;
+  padding: 12px;
+  margin-bottom: 15px;
+}
+
+.register-btn {
+  background-color: #0d47a1;
+  color: white;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 4px;
+  font-weight: 500;
+  margin-top: 10px;
+  margin-bottom: 15px;
+}
+
+.back-to-login {
+  text-align: center;
+}
+
+.back-to-login a {
+  color: #666;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.row {
+  margin: 0 -8px;
+}
+
+.col-6 {
+  padding: 0 8px;
+}
+
+.btn-staybooker {
+  background-color: var(--staybooker-blue) !important;
+  border-color: var(--staybooker-blue) !important;
+  color: white !important;
+}
+
+.btn-staybooker:hover {
+  background-color: #0d47a1 !important;
+  border-color: #0d47a1 !important;
+}
+
+.navbar-brand {
+  font-size: 24px;
+  font-weight: bold;
+  color: white !important;
+}
+
+.nav-link {
+  color: white !important;
+}
+
+.bg-primary {
+  background-color: var(--staybooker-blue) !important;
+}
+
+.main-container {
+  flex: 1;
+  display: flex;
+  min-height: calc(100vh - 160px);
+  /* Subtract header and footer height */
+}
+
+.sidebar {
+  /* width: var(--sidebar-width);
+    height: calc(100vh - 56px);
+    position: fixed;
+    left: 0;
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-right: 1px solid #dee2e6; */
+  width: 250px;
+  background-color: #fff;
+  padding: 2rem;
+  border-right: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  height: fit-content;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  background-color: #f8f9fa;
+}
+
+.sidebar-link {
+  color: var(--staybooker-blue);
+  text-decoration: none;
+  padding: 10px 15px;
+  display: block;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+.sidebar-link:hover,
+.sidebar-link.active {
+  background-color: var(--staybooker-blue);
+  color: white;
+}
+
+.sidebar-link i {
+  width: 25px;
+}
+
+.booking-card {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.wishlist-item {
+  position: relative;
+}
+
+.wishlist-remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.user-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: #e9ecef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.pagination a {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #0047ab;
+  /* Royal blue color from the image */
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.pagination a:hover {
+  background-color: #003380;
+  /* Darker blue on hover */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.pagination a:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.pagination a.disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  pointer-events: none;
+}
