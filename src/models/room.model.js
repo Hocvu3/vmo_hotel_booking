@@ -11,7 +11,11 @@ const Room = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    category_id: {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    categoryId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -24,8 +28,16 @@ const Room = sequelize.define(
       allowNull: false,
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
+    },
+    max_guests: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        min: 1,
+        max: 10,
+      },
     },
   },
   {
@@ -34,8 +46,8 @@ const Room = sequelize.define(
 );
 
 //Relationship
-Room.hasMany(Booking, { foreignKey: 'room_id', onDelete: 'CASCADE' });
-Booking.belongsTo(Room, { foreignKey: 'room_id' });
+Room.hasMany(Booking, { foreignKey: 'roomId', onDelete: 'CASCADE' });
+Booking.belongsTo(Room, { foreignKey: 'roomId' });
 
 Room.hasMany(Image);
 Image.belongsTo(Room);

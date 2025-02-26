@@ -15,3 +15,6 @@ node_modules/
 
 # Bỏ qua file cơ sở
 *.sql
+
+# Skip data folder
+data/

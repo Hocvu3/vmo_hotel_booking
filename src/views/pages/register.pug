@@ -1,0 +1,47 @@
+extends ../layouts/main.pug
+
+block content
+  .login-container
+    .register-card
+      h1.register-title Join the Adventure!
+      p.register-subtitle Create your account and start your journey with us
+
+      form
+        .row
+          .col-6
+            input.form-control(
+              type="text"
+              placeholder="First Name"
+              required
+            )
+          .col-6
+            input.form-control(
+              type="text"
+              placeholder="Last Name"
+              required
+            )
+        input.form-control(
+          type="email"
+          placeholder="Email"
+          required
+        )
+        input.form-control(
+          type="tel"
+          placeholder="Phone"
+          required
+        )
+        input.form-control(
+          type="password"
+          placeholder="Password"
+          required
+        )
+        input.form-control(
+          type="password"
+          placeholder="Confirm Password"
+          required
+        )
+
+        button.register-btn(type="submit") Register
+
+      .back-to-login
+        a(href="#") Back to login
