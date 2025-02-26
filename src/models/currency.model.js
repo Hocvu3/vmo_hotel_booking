@@ -1,5 +1,5 @@
-const { rawListeners } = require('../../app');
 const sequelize = require('../config/db');
+const Payment = require('./payment.model');
 const { Sequelize, DataTypes } = require('sequelize');
 
 const Currency = sequelize.define(
@@ -24,5 +24,9 @@ const Currency = sequelize.define(
     timestamps: true,
   }
 );
+
+// Relation
+Currency.hasOne(Payment);
+Payment.belongsTo(Currency);
 
 module.exports = Currency;

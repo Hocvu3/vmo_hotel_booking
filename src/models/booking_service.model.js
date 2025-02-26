@@ -9,11 +9,11 @@ const Booking_Service = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    booking_id: {
+    bookingId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    service_id: {
+    serviceId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
