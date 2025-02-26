@@ -1,0 +1,130 @@
+extends ../layouts/main.pug
+
+block content
+  // Sidebar
+  .main-container
+    .sidebar
+      .user-avatar
+        i.fas.fa-user.fa-3x.text-muted
+      .text-center.mb-4
+        h5.mb-0 John Doe
+        p.text-muted john.doe@example.com
+      a.sidebar-link.active(href='#profile')
+        i.fas.fa-user-circle
+        |  Profile
+      a.sidebar-link(href='#bookings')
+        i.fas.fa-history
+        |  Booking History
+      a.sidebar-link(href='#wishlist')
+        i.fas.fa-heart
+        |  Wishlist
+      a.sidebar-link(href='#password')
+        i.fas.fa-lock
+        |  Change Password
+      a.sidebar-link.text-danger(href='#logout')
+        i.fas.fa-sign-out-alt
+        |  Logout
+
+    .main-content
+      // Profile Section
+      #profile.tab-content
+        h2.mb-4 Profile Settings
+        .card
+          .card-body
+            form
+              .row.mb-3
+                .col-md-6
+                  label.form-label First Name
+                  input.form-control(type="text" value="John")
+                .col-md-6
+                  label.form-label Last Name
+                  input.form-control(type="text" value="Doe")
+              .mb-3
+                label.form-label Email
+                input.form-control(type="email" value="john.doe@example.com")
+              .mb-3
+                label.form-label Phone
+                input.form-control(type="tel" value="+1 234 567 8900")
+              button.btn.btn-staybooker(type="submit") Save Changes
+
+      // Change Password Section
+      #password.tab-content.d-none
+        h2.mb-4 Change Password
+        .card
+          .card-body
+            form
+              .mb-3
+                label.form-label Current Password
+                input.form-control(type="password")
+              .mb-3
+                label.form-label New Password
+                input.form-control(type="password")
+              .mb-3
+                label.form-label Confirm New Password
+                input.form-control(type="password")
+              button.btn.btn-staybooker(type="submit") Update Password
+
+      // Booking History Section
+      #bookings.tab-content.d-none
+        h2.mb-4 Booking History
+        .booking-card.p-3
+          .row
+            .col-md-3
+              img.img-fluid.rounded(src="/api/placeholder/300/200" alt="Hotel")
+            .col-md-9
+              .d-flex.justify-content-between
+                h4 Hyatt Pune
+                span.badge.bg-success Completed
+              p.text-muted 23 Feb 2025 - 24 Feb 2025
+              p
+                strong Room: 
+                | 1 King Bed Standard Non Smoking
+              p
+                strong Total Paid: 
+                | ₹22,302
+              button.btn.btn-staybooker.btn-sm View Details
+
+      // Wishlist Section
+      #wishlist.tab-content.d-none
+        h2.mb-4 My Wishlist
+        .row
+          .col-md-6.mb-4
+            .card.wishlist-item
+              img.card-img-top(src="/api/placeholder/400/250" alt="Hotel")
+              .wishlist-remove
+                i.fas.fa-times
+              .card-body
+                h5.card-title Grand Hyatt Mumbai
+                p.card-text.text-muted Mumbai, Maharashtra
+                .d-flex.justify-content-between.align-items-center
+                  .hotel-rating
+                    i.fas.fa-star
+                    i.fas.fa-star
+                    i.fas.fa-star
+                    i.fas.fa-star
+                    i.fas.fa-star
+                  strong ₹18,500/night
+                button.btn.btn-staybooker.w-100.mt-3 Book Now
+
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js')
+  script.
+    // Simple tab navigation
+    document.querySelectorAll(".sidebar-link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        // Remove active class from all links
+        document
+          .querySelectorAll(".sidebar-link")
+          .forEach((l) => l.classList.remove("active"));
+        // Add active class to clicked link
+        link.classList.add("active");
+
+        // Hide all tab contents
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((tab) => tab.classList.add("d-none"));
+        // Show selected tab content
+        const targetId = link.getAttribute("href").substring(1);
+        document.getElementById(targetId).classList.remove("d-none");
+      });
+    });
