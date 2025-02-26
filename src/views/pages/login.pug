@@ -1,0 +1,33 @@
+extends ../layouts/main.pug
+
+block content
+    .login-container
+        .login-card
+            h1.login-title Welcome Back
+            p.login-subtitle Log in to continue to your account
+
+            form
+                .mb-3
+                    input.form-control(
+                    type="email"
+                    placeholder="Email"
+                    required
+                    )
+
+                .mb-3
+                    input.form-control(
+                    type="password"
+                    placeholder="Password"
+                    required
+                    )
+
+                button.login-btn(type="submit") Log In
+
+            .forgot-password
+                a(href="#") Forgot your password?
+
+            .divider New to Stay Booker?
+
+            .create-account
+                a(href="#") Create an account
+

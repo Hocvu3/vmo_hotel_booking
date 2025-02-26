@@ -1,14 +1,17 @@
 const express = require('express');
 const userController = require('../controllers/user.controller');
 const authController = require('../controllers/auth.controller');
-const { validateLogin } = require('../validators/auth.validator');
+const isProtected = require('../middlewares/auth.middleware');
+const restrictedTo = require('../middlewares/role.middleware');
+
 const userRouter = express.Router();
 
-userRouter.post('/login', validateLogin, authController.login);
-userRouter.post('/logout', authController.logout);
+userRouter.route('/').get(userController.index).post(userController.store);
 
-userRouter.get('/add-user', userController.addUsers);
-userRouter.get('/get-user', userController.getUsers);
-userRouter.delete('/delete-user/:id', userController.deleteUser);
+userRouter
+  .route('/:id')
+  .get(isProtected, restrictedTo('admin'), userController.show)
+  .patch(isProtected, userController.update)
+  .delete(isProtected, userController.destroy);
 
 module.exports = userRouter;

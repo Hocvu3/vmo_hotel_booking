@@ -1,6 +1,4 @@
 const sequelize = require('../config/db');
-const Booking = require('./booking.model');
-const Currency = require('./currency.model');
 const { Sequelize, DataTypes } = require('sequelize');
 const Payment = sequelize.define(
   'payment',
@@ -10,11 +8,11 @@ const Payment = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    booking_id: {
+    bookingId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    currency_id: {
+    currencyId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -26,7 +24,7 @@ const Payment = sequelize.define(
       type: DataTypes.STRING,
     },
     transaction_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
     },
     total_price: {
       type: DataTypes.FLOAT,
@@ -37,11 +35,6 @@ const Payment = sequelize.define(
   }
 );
 
-// Relationship
-Payment.hasOne(Booking, { onDelete: 'CASCADE' });
-Booking.belongsTo(Payment);
-
-Payment.hasOne(Currency);
-Currency.belongsTo(Payment);
+// Relation
 
 module.exports = Payment;

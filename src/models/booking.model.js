@@ -1,4 +1,5 @@
 const sequelize = require('../config/db');
+const Payment = require('./payment.model');
 const { Sequelize, DataTypes } = require('sequelize');
 const Booking_Service = require('./booking_service.model');
 const Booking_Discount = require('./booking_discount.model');
@@ -10,11 +11,11 @@ const Booking = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    user_id: {
+    userId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
-    room_id: {
+    roomId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -34,10 +35,6 @@ const Booking = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    created_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-    },
   },
   {
     timestamps: true,
@@ -49,5 +46,8 @@ Booking.hasOne(Booking_Discount), Booking_Discount.belongsTo(Booking);
 
 Booking.hasMany(Booking_Service);
 Booking_Service.belongsTo(Booking);
+
+Booking.hasOne(Payment, { onDelete: 'CASCADE' });
+Payment.belongsTo(Booking);
 
 module.exports = Booking;

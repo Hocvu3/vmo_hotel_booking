@@ -1,6 +1,7 @@
+const Room = require('./room.model');
 const sequelize = require('../config/db');
 const { Sequelize, DataTypes } = require('sequelize');
-const Room = require('./room.model');
+const Review = require('./review.model');
 const Hotel = sequelize.define(
   'hotel',
   {
@@ -36,5 +37,8 @@ const Hotel = sequelize.define(
 // Relationship
 Hotel.hasMany(Room, { foreignKey: 'hotel_id', onDelete: 'CASCADE' });
 Room.belongsTo(Hotel, { foreignKey: 'hotel_id' });
+
+Hotel.hasMany(Review, { foreignKey: 'hotel_id', onDelete: 'CASCADE' });
+Review.belongsTo(Hotel);
 
 module.exports = Hotel;

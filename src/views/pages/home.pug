@@ -1,0 +1,49 @@
+extends ../layouts/main.pug
+
+block content
+    .hero-section
+        .container
+            h1 Discover your perfect stay around the globe
+            p Enter your dates to see the latest prices and begin your journey of relaxation and adventure today.
+            .search-box
+                .row.align-items-center
+                    .col-md-3
+                        input.form-control(type="text" placeholder="Pune" value="Pune")
+                    .col-md-3
+                        input.form-control(type="date" placeholder="Check-in")
+                    .col-md-3
+                        input.form-control(type="date" placeholder="Check-out")
+                    .col-md-2
+                        input.form-control(type="number" placeholder="No. Of Guests")
+                    .col-md-1
+                        button.search-button SEARCH
+    .container.my-5
+        h2.text-center.mb-4 Book Hotels at Popular Destinations
+        .row
+            each destination in ['Mumbai', 'Bangkok', 'London', 'Dubai', 'Oslo']
+                .col
+                    .destination-card
+                        img(src="/api/placeholder/300/200" alt=destination)
+                        p.mt-2= destination
+    .container.my-5
+        h2.text-center.mb-4 Handpicked nearby rooms for you
+        each room in rooms
+            .hotel-card
+                .row
+                    .col-md-3
+                        img.hotel-image(src=(room.images && room.images.length > 0) ? room.images[0].image_url : '/img/default.png', alt=room.name)
+                    .col-md-7
+                        h4= room.name
+                        p.text-muted= room.status 
+                        //- each feature in room.features
+                        //-     p.feature-check ✓= feature
+                    .col-md-2.text-end
+                        span.star-rating= room.max_guests + ' ★'
+                        p.mt-3 #{room.price ? room.price.amount : 50} USD
+                        button.book-now(onclick=`window.location.href='/room/${room.id}'`) Book now
+        .pagination
+            if currentPage > 1
+                a(href=`?page=${currentPage - 1}`) Previous
+            if currentPage < totalPages
+                a(href=`?page=${currentPage + 1}`) Next
+

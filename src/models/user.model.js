@@ -15,7 +15,7 @@ const User = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    name: {
+    full_name: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -39,6 +39,13 @@ const User = sequelize.define(
         isIn: [['user', 'employee', 'admin']],
       },
     },
+    date_of_birth: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    phone_number: {
+      type: DataTypes.STRING,
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -46,18 +53,11 @@ const User = sequelize.define(
         len: [8, 100],
       },
     },
-    passwordConfirm: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     passwordChangedAt: {
       type: DataTypes.DATE,
     },
     passwordResetToken: {
       type: DataTypes.STRING,
-    },
-    passwordResetExpires: {
-      type: DataTypes.DATE,
     },
     active: {
       type: DataTypes.BOOLEAN,
@@ -86,17 +86,29 @@ const User = sequelize.define(
 );
 
 // Relationship
-User.hasMany(Booking, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-Booking.belongsTo(User, { foreignKey: 'user_id' });
+User.hasMany(Booking, { foreignKey: 'userId', onDelete: 'CASCADE' });
+Booking.belongsTo(User, { foreignKey: 'userId' });
 
-User.hasOne(Salary, { foreignKey: 'user_id', onDelete: 'CASCADE' });
-Salary.belongsTo(User, { foreignKey: 'user_id' });
+User.hasOne(Salary, { foreignKey: 'userId', onDelete: 'CASCADE' });
+Salary.belongsTo(User, { foreignKey: 'userId' });
 
-User.hasMany(Review, { foreignKey: 'user_id' });
+User.hasMany(Review, { foreignKey: 'userId' });
 Review.belongsTo(User);
 
 // Check password
 User.prototype.correctPassword = async function (candidatePassword) {
   return await bcrypt.compare(candidatePassword, this.password);
 };
+
+// Check whether password changed during jwt sent or not
+User.prototype.changedPasswordAfter = function (JWTTimestamp) {
+  if (this.passwordChangedAt) {
+    const changedTimestamp = Math.floor(
+      this.passwordChangedAt.getTime() / 1000
+    );
+    return JWTTimestamp < changedTimestamp;
+  }
+  return false;
+};
+
 module.exports = User;

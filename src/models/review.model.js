@@ -13,7 +13,7 @@ const Review = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
-    user_id: {
+    userId: {
       type: DataTypes.UUID,
       allowNull: false,
     },
@@ -26,7 +26,7 @@ const Review = sequelize.define(
       },
     },
     comment: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
   },
   {
