@@ -62,7 +62,32 @@ const home = async (req, res) => {
 // Return a specific room
 const roomDetail = async (req, res) => {
   try {
-    const room = await Room.findByPk(req.params.id);
+    const room = await Room.findByPk(req.params.id, {
+      include: [
+        {
+          model: Image,
+          as: 'images',
+          attributes: ['image_url'], // Take attributes from array.
+        },
+        {
+          model: Price,
+          as: 'price',
+          attributes: ['amount'],
+        },
+        {
+          model: Hotel,
+          as: 'hotel',
+          attributes: ['name', 'address'],
+          include: [
+            {
+              model: Review,
+              as: 'reviews',
+              attributes: ['rating'],
+            },
+          ],
+        },
+      ],
+    });
     if (!room) {
       return apiResponse(res, 404, 'Room not found');
     }
