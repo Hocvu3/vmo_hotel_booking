@@ -16,7 +16,8 @@ const env = {
 
   // Stripe
   Publishable_key: process.env.Publishable_key,
-  Secret_key: process.env.Secret_key,
+  STRIPE_SECRET_KEY: process.env.Secret_key,
+  WEBHOOK_SECRET: process.env.WEBHOOK_SECRET,
 };
 
 module.exports = env;
