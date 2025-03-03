@@ -5,10 +5,10 @@ block content
       .row
         .col-md-8
           .card.mb-4
-            img.card-img-top(src="/api/placeholder/800/400" alt="Hotel Image")
+            img.card-img-top(src=(room.images && room.images.length > 0) ? room.images[0].image_url : '/img/default.png', alt=room.name)
             .card-body
               .d-flex.align-items-center.mb-2
-                h2.card-title.mb-0 Hyatt Pune
+                h2.card-title.mb-0= room.name
                 .hotel-rating.ms-3
                   i.fas.fa-star
                   i.fas.fa-star
@@ -17,7 +17,7 @@ block content
                   i.fas.fa-star
               p.text-muted Kalyani Nagar, Pune | 3.3 kms from city center
               p.card-text
-                A serene stay awaits at our plush hotel, offering a blend of luxury and comfort with top-notch amenities.
+                A= room.description
               ul.list-unstyled
                 li.mb-2
                   i.fas.fa-utensils.me-2

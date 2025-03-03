@@ -6,6 +6,7 @@ const roomRouter = require('./src/routes/room.route');
 const userRouter = require('./src/routes/user.route');
 const viewRouter = require('./src/routes/view.route');
 const authRouter = require('./src/routes/auth.route');
+const bookingRouter = require('./src/routes/booking.route');
 const errorHandler = require('./src/middlewares/error.middleware');
 
 // Set view engine
@@ -24,6 +25,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/rooms', roomRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 // Put all middlewares after router
 // Error handling middleware
