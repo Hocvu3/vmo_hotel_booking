@@ -6,12 +6,8 @@ const handleWebhook = async (req, res) => {
       console.log('Payment Succeeded!', event.data.object);
       break;
 
-    case 'payment_intent.succeeded':
-      console.log('Payment Confirmed!', event.data.object);
-      break;
-
-    case 'payment_intent.payment_failed':
-      console.log('Payment Failed!', event.data.object);
+    case 'checkout.session.expired':
+      console.log('Checkout session expired!', event.data.object);
       break;
 
     case 'charge.refunded':
@@ -23,7 +19,7 @@ const handleWebhook = async (req, res) => {
       break;
 
     default:
-      console.log(`ℹ️ Unhandled Event : ${event.type}`);
+      console.log(`Unhandled Event : ${event.type}`);
   }
 
   res.json({ received: true });

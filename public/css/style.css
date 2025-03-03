@@ -27,11 +27,27 @@
 }
 
 .nav-link {
+  display: flex;
+  align-items: center;
   color: white;
   text-decoration: none;
   font-size: 14px;
   padding: 8px 12px;
   transition: opacity 0.3s;
+}
+
+/* User photo */
+.nav__user-img {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+/* User name */
+.nav__user-name {
+  font-size: 16px;
+  color: white;
 }
 
 .nav-link:hover {
@@ -95,12 +111,6 @@
 
 .language-option:hover {
   background-color: #f5f5f5;
-}
-
-.divider {
-  height: 1px;
-  background-color: #eee;
-  margin: 0;
 }
 
 .divider {
@@ -466,13 +476,6 @@
   font-size: 14px;
 }
 
-.divider {
-  text-align: center;
-  margin: 20px 0;
-  color: #666;
-  font-size: 14px;
-}
-
 .create-account {
   text-align: center;
 }
@@ -689,4 +692,227 @@
   background-color: #cccccc;
   cursor: not-allowed;
   pointer-events: none;
+}
+
+/* 
+Show alert
+*/
+
+.alert {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px 20px;
+  background-color: #28a745;
+  /* Màu xanh success */
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  z-index: 1000;
+  opacity: 0;
+  animation: fadeInOut 3s ease-in-out;
+}
+
+.alert--error {
+  background-color: #dc3545;
+  /* Màu đỏ error */
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+
+  10% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
+
+/* End alert
+*/
+/* Summary */
+.section-title {
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.booking-summary {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.booking-header {
+  background-color: #0d47a1;
+  color: white;
+  padding: 15px 20px;
+}
+
+.summary-item {
+  padding: 12px 20px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+}
+
+.summary-item:last-child {
+  border-bottom: none;
+}
+
+.price-summary {
+  background-color: #f9f9f9;
+  padding: 15px 20px;
+  border-top: 1px solid #eee;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.price-row.total {
+  font-weight: 600;
+  font-size: 18px;
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
+  margin-top: 15px;
+}
+
+.discount-section {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.discount-field {
+  display: flex;
+}
+
+.discount-field input,
+.discount-field button {
+  height: 40px;
+  box-sizing: border-box;
+}
+
+.discount-field input {
+  border-radius: 4px 0 0 4px;
+  border: 1px solid #ced4da;
+}
+
+.discount-field button {
+  background-color: #ffbf00;
+  color: #212529;
+  font-weight: 500;
+  border: none;
+  border-radius: 0 4px 4px 0;
+}
+
+.discount-field button:hover {
+  background-color: #e6ac00;
+}
+
+.payment-section {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.payment-method {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.payment-card {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 15px;
+  flex: 1;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.payment-card:hover,
+.payment-card.active {
+  border-color: #0d47a1;
+  background-color: rgba(13, 71, 161, 0.05);
+}
+
+.payment-card.active {
+  box-shadow: 0 2px 8px rgba(13, 71, 161, 0.2);
+}
+
+.card-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+  color: #6c757d;
+}
+
+.payment-card.active .card-icon {
+  color: #0d47a1;
+}
+
+.btn-book {
+  background-color: #ffbf00;
+  color: #212529;
+  font-weight: 600;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+  margin-top: 15px;
+  transition: all 0.2s;
+}
+
+.btn-book:hover {
+  background-color: #e6ac00;
+  transform: translateY(-2px);
+}
+
+.free-cancel {
+  color: #28a745;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.date-input,
+.guest-input,
+.room-input {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px 15px;
+}
+
+.date-input i,
+.guest-input i,
+.room-input i {
+  color: #6c757d;
+  margin-right: 8px;
+}
+
+.price-badge {
+  color: #0d47a1;
+  font-size: 24px;
+  font-weight: 600;
 }

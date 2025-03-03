@@ -29,7 +29,7 @@ const User = sequelize.define(
     },
     photo: {
       type: DataTypes.STRING,
-      defaultValue: 'default.jpg',
+      defaultValue: 'https://placehold.co/150x150',
     },
     role: {
       type: DataTypes.STRING,

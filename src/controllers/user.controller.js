@@ -7,8 +7,9 @@ const store = async (req, res) => {
     const user = await User.bulkCreate(
       [
         {
-          name: 'Michadel Jackson Johnson',
-          email: 'michaedl.johnson@example.com',
+          full_name: 'Michadel Jackson',
+          date_of_birth: '2003-03-13',
+          email: 'johnson@example.com',
           password: 'password789',
           passwordConfirm: 'password789',
           role: 'employee',
@@ -21,7 +22,7 @@ const store = async (req, res) => {
 
     return apiResponse(res, 201, 'User added successfully', user);
   } catch (error) {
-    return apiResponse(res, 500, 'Server error');
+    return apiResponse(res, 500, 'Server error', { error: error.message });
   }
 };
 
@@ -57,8 +58,8 @@ const update = async (req, res) => {
       return apiResponse(res, 404, 'User not found');
     }
     //Update user with id
-    await user.update(req.body);
-    return apiResponse(res, 204, 'User updated successfully');
+    const new_user = await user.update(req.body);
+    return apiResponse(res, 200, 'success', new_user);
   } catch (error) {
     return apiResponse(res, 500, 'Server error', { error: error.message });
   }
