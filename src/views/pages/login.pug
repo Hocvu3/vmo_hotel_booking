@@ -5,29 +5,27 @@ block content
         .login-card
             h1.login-title Welcome Back
             p.login-subtitle Log in to continue to your account
-
-            form
+            form.form
                 .mb-3
-                    input.form-control(
+                    input#email.form-control(
                     type="email"
                     placeholder="Email"
                     required
+                    autocomplete="username"
                     )
 
                 .mb-3
-                    input.form-control(
+                    input#password.form-control(
                     type="password"
                     placeholder="Password"
                     required
+                    autocomplete="current-password"
                     )
 
                 button.login-btn(type="submit") Log In
 
             .forgot-password
-                a(href="#") Forgot your password?
-
-            .divider New to Stay Booker?
-
-            .create-account
-                a(href="#") Create an account
+                a(href="/login") Forgot your password?
+                .create-account
+                    a(href="/register") Create an account
 

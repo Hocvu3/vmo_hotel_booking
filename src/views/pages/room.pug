@@ -2,7 +2,7 @@ extends ../layouts/main.pug
 
 block content
     .container.my-4
-      .row
+      #user-information.row(if=user, data-user-id=`${user ? user.id : ''}`)
         .col-md-8
           .card.mb-4
             img.card-img-top(src=(room.images && room.images.length > 0) ? room.images[0].image_url : '/img/default.png', alt=room.name)
@@ -15,23 +15,10 @@ block content
                   i.fas.fa-star
                   i.fas.fa-star
                   i.fas.fa-star
-              p.text-muted Kalyani Nagar, Pune | 3.3 kms from city center
+              p.text-muted= room.hotel.address
               p.card-text
                 A= room.description
               ul.list-unstyled
-                li.mb-2
-                  i.fas.fa-utensils.me-2
-                  | Experience the pinnacle of elegance in our beautifully designed rooms with stunning cityscape views.
-                li.mb-2
-                  i.fas.fa-spa.me-2
-                  | Indulge in gastronomic delights at our in-house restaurants, featuring local and international cuisines.
-                li.mb-2
-                  i.fas.fa-map-marker-alt.me-2
-                  | Located in the heart of the city, our hotel is the ideal base for both leisure and business travelers.
-              p.text-success
-                i.fas.fa-check-circle.me-2
-                | Free cancellation | No prepayment needed – pay at the property
-
           .card
             .card-body
               .d-flex.justify-content-between.align-items-center.mb-4
@@ -82,7 +69,11 @@ block content
                     i.fas.fa-star
                 p
                   The hotel is very good and the staff is very friendly. The food is also very good.
-
+        script.
+          var room = !{JSON.stringify(room, null, 2)}
+          var services = !{JSON.stringify(services, null, 2)}
+          console.log("Rooms data:", room)
+          console.log("Services data:", services)
         .col-md-4
           .card
             .card-header.bg-primary.text-white
@@ -90,32 +81,79 @@ block content
             .card-body
               .mb-3
                 h5 Total Price
-                h4.text-primary 22,302 INR
+                h4#totalPrice.text-primary $#{room.price ? room.price.amount : 18900}
                 small.text-success Free cancellation 1 day prior to stay
               .mb-3
-                h5 Dates & Time
-                input.form-control.mb-2(type="date" value="2025-02-23")
-                input.form-control(type="text" value="Check-out" readonly)
+                h5 CheckIn & CheckOut Date
+                input#checkIn.form-control.mb-2(type="date")
+                input#checkOut.form-control(type="date" value="")
               .mb-3
-                h5 Reservation
-                select.form-select.mb-2
-                  option 1 room
-                  option 2 rooms
-                  option 3 rooms
+                h5 Reservations
                 select.form-select
-                  option 2 guests
-                  option 3 guests
-                  option 4 guests
+                  each num in Array.from({ length: room.max_guests }, (_, i) => i + 1)
+                    option #{num} guest#{num > 1 ? 's' : ''}
               .mb-3
                 h5 Room Type
                 select.form-select
-                  option 1 King Bed Standard Non Smoking
+                  option #{room.category.name ? room.category.name : 'Single Room'} 
               .mb-3
-                h5 Per day rate
-                p.mb-0 18,900 INR
-              .mb-4
-                h5 Taxes
-                p.mb-0 3,402 INR
-                small.text-muted GST - 12% on INR 0 - 2,500, 12% on INR 2,500-7,500, 18% on INR 7,500 and above
+                h5 Additional Services
+                each service in services
+                  .form-check
+                    input.form-check-input.service-checkbox(type="checkbox" id=`service-${service.id}` name="services[]" value=(service.prices && service.prices.length > 0 ? service.prices[0].amount : 'N/A') data-service-id=service.id)
+                    label.form-check-label(for=`service-${service.id}`) 
+                      | #{service.name} - $#{service.prices && service.prices.length > 0 ? service.prices[0].amount : 'N/A'}
+                small.text-muted.d-block.mt-2 Book now, You won’t be charged yet!
+              button.btn.btn-warning.w-100  Book Now
+    script.
+      document.addEventListener("DOMContentLoaded", function() {
+        let today = new Date().toISOString().split("T")[0]; 
+        let checkIn = document.getElementById("checkIn");
+        let checkOut = document.getElementById("checkOut");
 
-              button.btn.btn-warning.w-100 Confirm Booking
+        // Set min cho Check-in
+        checkIn.setAttribute("min", today);
+        checkIn.value = today;
+
+        // Set min cho Check-out
+        checkOut.setAttribute("min", today);
+
+        // When Check-in changes
+        checkIn.addEventListener("change", function() {
+          let checkInDate = checkIn.value;
+
+          // Set min cho Check-out
+          checkOut.setAttribute("min", checkInDate);
+
+          // If Check-out < Check-in
+          if (checkOut.value && checkOut.value <= checkInDate) {
+            alert("Check-out date must be later than Check-in date!");
+            checkOut.value = "";
+          }
+        });
+
+        // When Check-out changes
+        checkOut.addEventListener("change", function() {
+          if (checkOut.value <= checkIn.value) {
+            alert("Check-out date must be later than Check-in date!");
+            checkOut.value = ""; // Reset if Check-out < Check-in
+          }
+        });
+        // Calculate total price
+        let basePrice = #{room.price ? room.price.amount : 18900};
+        let totalPriceElement = document.getElementById("totalPrice");
+        
+        function updateTotalPrice() {
+          let total = basePrice;
+          document.querySelectorAll(".service-checkbox:checked").forEach((checkbox) => {
+            total += parseFloat(checkbox.value); // Add service price
+          });
+          totalPriceElement.textContent = `$${total.toFixed(2)}`;; // Update total price
+        }
+
+        // Add event listener to service checkboxes
+        document.querySelectorAll(".service-checkbox").forEach((checkbox) => {
+          checkbox.addEventListener("change", updateTotalPrice);
+        });
+      });
+

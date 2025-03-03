@@ -49,4 +49,33 @@ const isProtected = async (req, res, next) => {
   }
 };
 
-module.exports = isProtected;
+// Check logged in or not
+const isLoggedIn = async (req, res, next) => {
+  //1. check if token exist
+  if (req.cookies.jwt) {
+    try {
+      //2. verify token
+      const decoded = await promisify(jwt.verify)(
+        req.cookies.jwt,
+        env.JWT_SECRET
+      );
+      //3. check if user still, if not,
+      const currentUser = await User.findByPk(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
+      //4. check if user changed password after the token was issued
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next();
+      }
+      //Grant access to protected
+      res.locals.user = currentUser;
+      return next();
+    } catch (err) {
+      return next();
+    }
+  }
+  next();
+};
+
+module.exports = { isProtected, isLoggedIn };

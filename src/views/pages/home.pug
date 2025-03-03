@@ -93,7 +93,7 @@ block content
       //- Right side with rooms list
       .col-md-9
         .d-flex.justify-content-between.align-items-center.mb-4
-          h2 Handpicked nearby hotels for you
+          h2 Handpicked nearby rooms for you
           .sort-dropdown
             select.form-select
               option(selected) Sort by
@@ -101,7 +101,9 @@ block content
               option Price: High to Low
               option Guest Rating
               option Distance from Center
-
+        script.
+          var rooms = !{JSON.stringify(rooms, null, 2)}
+          console.log("Rooms data:", rooms)
         each room in rooms
           .hotel-card.mb-4.p-3.border.rounded.shadow-sm
             .row
@@ -110,14 +112,15 @@ block content
               .col-md-7
                 h4.mb-2= room.name
                 p.text-muted.mb-3= room.status || 'Location information'
+                p.text-muted.mb-3= room.hotel.address || 'Location information'
                 .features
                   p.feature-check.mb-1 ✓ Free cancellation
-                  p.feature-check.mb-1 ✓ No prepayment needed — pay at the property
+                  p.feature-check.mb-1 ✓ No prepayment needed
               .col-md-2.text-end.d-flex.flex-column.justify-content-between
                 .rating
                   span.star-rating.badge.bg-primary.p-2= room.max_guests + ' ★'
                 .price-section.mt-3
-                  p.price.fw-bold.mb-1 ₹ #{room.price ? room.price.amount : 18900}
+                  p.price.fw-bold.mb-1 $#{room.price ? room.price.amount : 18900}
                   button.btn.btn-warning.w-100(onclick=`window.location.href='/room/${room.id}'`) View Detail
 
         .pagination.d-flex.justify-content-center.mt-4
