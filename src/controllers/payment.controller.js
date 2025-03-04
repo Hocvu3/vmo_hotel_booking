@@ -1,38 +1,54 @@
 const env = require('../config/env');
-const { Room, Price } = require('../models/db');
+const { Room, Price, Booking, Payment } = require('../models/db');
 const stripe = require('stripe')(env.STRIPE_SECRET_KEY);
 
 const createPaymentIntent = async (req, res) => {
+  const { booking_id, total_amount } = req.body;
   try {
-    const room = await Room.findByPk(req.params.id, {
-      include: [{ model: Price, as: 'price', attributes: ['amount'] }],
+    const booking = await Booking.findByPk(req.params.id, {
+      include: [
+        {
+          model: Room,
+        },
+      ],
     });
+    if (!booking) return res.status(404).json({ message: 'Booking not found' });
 
-    if (!room) return res.status(404).json({ message: 'Không tìm thấy phòng' });
-
+    // Create Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
-      success_url: `${req.protocol}://${req.get('host')}/success`,
-      cancel_url: `${req.protocol}://${req.get('host')}/room/${room.id}`,
+      success_url: `${req.protocol}://${req.get('host')}/`,
+      cancel_url: `${req.protocol}://${req.get('host')}/`,
       client_reference_id: req.params.id,
       line_items: [
         {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: `${room.name} Room`,
-              description: room.description,
+              name: `${booking.room.name} Room`,
+              description: booking.room.description,
             },
-            unit_amount: room.price.amount * 100,
+            unit_amount: total_amount * 100,
           },
           quantity: 1,
         },
       ],
     });
 
+    // Store payment
+    const payment = await Payment.create({
+      bookingId: booking_id,
+      currencyId: '26fec2aa-fd4a-400e-a5f6-f002d8d84eb6',
+      payment_method: 'Stripe',
+      status: 'Pending',
+      transaction_id: session.id,
+      total_price: total_amount,
+    });
+    // console.log(payment);
     res.status(200).json({ status: 'success', session });
   } catch (err) {
+    console.log(err.message);
     res.status(500).json({ message: err.message });
   }
 };

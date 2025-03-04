@@ -1,5 +1,15 @@
-const { Image, Room, Price, Hotel, Review } = require('../models/db');
+const { Op } = require('sequelize'); // Import Operators
 const apiResponse = require('../utils/apiResponse');
+const {
+  Image,
+  Room,
+  Price,
+  Hotel,
+  Review,
+  Category,
+  Service,
+} = require('../models/db');
+const { title } = require('process');
 // Return homepage
 const home = async (req, res) => {
   try {
@@ -28,6 +38,8 @@ const home = async (req, res) => {
           model: Price,
           as: 'price',
           attributes: ['amount'],
+          required: true, // Same as INNER JOIN
+          where: { amount: { [Op.gt]: 0 } },
         },
         {
           model: Hotel,
@@ -49,9 +61,6 @@ const home = async (req, res) => {
       currentPage: page,
       totalPages: totalPages,
     });
-    // return res.status(200).json({
-    //   rooms,
-    // });
   } catch (error) {
     return res
       .status(500)
@@ -73,6 +82,13 @@ const roomDetail = async (req, res) => {
           model: Price,
           as: 'price',
           attributes: ['amount'],
+          required: true, // Same as INNER JOIN
+          where: { amount: { [Op.gt]: 0 } },
+        },
+        {
+          model: Category,
+          as: 'category',
+          attributes: ['name'],
         },
         {
           model: Hotel,
@@ -91,15 +107,34 @@ const roomDetail = async (req, res) => {
     if (!room) {
       return apiResponse(res, 404, 'Room not found');
     }
+    const services = await Service.findAll({
+      include: [
+        {
+          model: Price,
+          as: 'prices',
+          attributes: ['amount'],
+          required: true, // Same as INNER JOIN
+          where: { amount: { [Op.gt]: 0 } },
+        },
+      ],
+    });
     res.status(200).render('room', {
       title: 'Rooms',
       room,
+      services,
     });
   } catch (error) {
     return res
       .status(500)
       .json({ message: 'Server error', error: error.message });
   }
+};
+
+// Summary
+const summary = (req, res) => {
+  res.status(200).render('summary', {
+    title: 'Summary',
+  });
 };
 
 // Return login page
@@ -123,4 +158,4 @@ const dashboard = (req, res) => {
   });
 };
 
-module.exports = { home, roomDetail, login, register, dashboard };
+module.exports = { home, roomDetail, summary, login, register, dashboard };

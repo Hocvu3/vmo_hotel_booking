@@ -7,8 +7,7 @@ block content
       .user-avatar
         i.fas.fa-user.fa-3x.text-muted
       .text-center.mb-4
-        h5.mb-0 John Doe
-        p.text-muted john.doe@example.com
+        h5.mb-0 #{user.full_name}
       a.sidebar-link.active(href='#profile')
         i.fas.fa-user-circle
         |  Profile
@@ -21,7 +20,7 @@ block content
       a.sidebar-link(href='#password')
         i.fas.fa-lock
         |  Change Password
-      a.sidebar-link.text-danger(href='#logout')
+      a.sidebar-link.text-danger.sidebar-link-logout(href='#logout')
         i.fas.fa-sign-out-alt
         |  Logout
 
@@ -29,22 +28,22 @@ block content
       // Profile Section
       #profile.tab-content
         h2.mb-4 Profile Settings
-        .card
+        #user-info.card(data-user-id=`${user.id}`)
           .card-body
-            form
+            form.user-form
               .row.mb-3
                 .col-md-6
-                  label.form-label First Name
-                  input.form-control(type="text" value="John")
+                  label.form-label Name
+                  input#user_name.form-control(type="text" value=`${user.full_name}`)
                 .col-md-6
-                  label.form-label Last Name
-                  input.form-control(type="text" value="Doe")
+                  label.form-label Date of Birth
+                  input#user_date.form-control(type="date" value=`${user.date_of_birth}`)
               .mb-3
                 label.form-label Email
-                input.form-control(type="email" value="john.doe@example.com")
+                input#user_email.form-control(type="email" value=`${user.email}`)
               .mb-3
                 label.form-label Phone
-                input.form-control(type="tel" value="+1 234 567 8900")
+                input#user_phone.form-control(type="tel" value=`${user.phone_number}`)
               button.btn.btn-staybooker(type="submit") Save Changes
 
       // Change Password Section

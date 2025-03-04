@@ -8,7 +8,7 @@ sequelize
   .authenticate()
   .then(() => {
     console.log('Database connected...');
-    return sequelize.sync(); // Tạo bảng tự động
+    return sequelize.sync(); // Auto create tables
   })
   .then(() => {
     console.log('Sequelize models synchronized.');

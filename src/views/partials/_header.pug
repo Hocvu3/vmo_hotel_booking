@@ -35,4 +35,10 @@ nav.navbar.navbar-expand-lg
             span Português
       a.nav-link(href='/') HOME
       a.nav-link(href='/') ABOUT US
-      a.nav-link(href='/login') LOGIN/REGISTER
+      if user
+        a.nav-link(href='/dashboard')
+          img.nav__user-img(src=(user.photo && user.photo.length > 0) ? user.photo : '/img/default.png', alt=user.name)
+          span.nav__user-name #{user.full_name.split(' ')[0]}
+      else 
+        a.nav-link(href='/login') LOGIN/REGISTER
+
