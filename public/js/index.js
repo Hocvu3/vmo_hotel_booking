@@ -3,7 +3,8 @@ import 'regenerator-runtime/runtime';
 import { showAlert } from './alert';
 import { login, logout } from './login';
 import { updateInfo } from './settings';
-import { createBooking, getBooking } from './booking';
+import { createPayment } from './payment';
+import { createBooking, updateBookingSummary } from './booking';
 
 console.log('hello from parcel, this is only a test, we will remove soodn');
 
@@ -84,6 +85,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
   const bookingId = urlParams.get('bookingId');
   if (bookingId) {
-    console.log(bookingId);
+    updateBookingSummary(bookingId);
+  }
+
+  // Payment
+  const bookingSummary = document.querySelector('.booking-summary');
+  if (bookingSummary) {
+    document.querySelector('.btn-book').addEventListener('click', async () => {
+      if (bookingId) {
+        const total_amount_text =
+          document.getElementById('total-price').textContent;
+        const total_amount =
+          parseFloat(total_amount_text.replace('$', '')) || 0;
+        createPayment(bookingId, total_amount);
+      }
+    });
   }
 });

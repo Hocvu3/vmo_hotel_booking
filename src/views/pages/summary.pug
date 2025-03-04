@@ -2,106 +2,73 @@ extends ../layouts/main.pug
 
 block content
   .container.my-5
-    .row
+    .row.booking-summary
       .col-lg-7.mb-4.mb-lg-0
         // Booking Details
-        h2.section-title Booking Details
+        h2.section-title Stay Details
 
         // Dates Section
         .booking-summary.mb-4
           .booking-header
-            h5.mb-0 Stay Information
+            h5#room-name.mb-0 Name of rooms
           .p-3
             .row.mb-3
               .col-md-6.mb-3.mb-md-0
                 label.form-label Check-In Date
                 .date-input
                   i.fas.fa-calendar
-                  | 29/03/2025
+                  span#check-in-date 29/03/2025
               .col-md-6
                 label.form-label Check-Out Date
                 .date-input
                   i.fas.fa-calendar
-                  input(type="text" class="border-0 bg-transparent" placeholder="dd/mm/yyyy")
-            .row
+                  span#check-out-date 29/03/2025
+            .row.mb-3
               .col-md-6.mb-3.mb-md-0
-                label.form-label Guests
+                label.form-label Name
                 .guest-input
                   i.fas.fa-user
-                  | 3 guests
+                  span#guest-name name of booker
               .col-md-6
-                label.form-label Room Type
+                label.form-label Email
                 .room-input
                   i.fas.fa-bed
-                  | Urban
-
+                  span#user-email email
+            .row.mb-3
+              .col-md-6.mb-3.mb-md-0
+                label.form-label Room type
+                .guest-input
+                  i.fas.fa-user
+                  span#room-type Urban
+              .col-md-6
+                label.form-label Services
+                select#service-dropdown.form-select.guest-input
         // Discount Section
         .discount-section.mb-4
           h5.mb-3 Discount Code
           .discount-field
             input(type="text" class="form-control" placeholder="Enter discount code")
             button.btn.px-4 Apply
-
-        // Payment Options
-        .payment-section
-          h5.mb-3 Payment Method
-          .payment-method
-            .payment-card.active
-              .card-icon
-                i.fab.fa-cc-visa
-              | Credit Card
-            .payment-card
-              .card-icon
-                i.fab.fa-paypal
-              | PayPal
-            .payment-card
-              .card-icon
-                i.fas.fa-building-columns
-              | Bank Transfer
-          .credit-card-form
-            .mb-3
-              label.form-label Card Number
-              input(type="text" class="form-control" placeholder="**** **** **** ****")
-            .row.mb-3
-              .col-md-6.mb-3.mb-md-0
-                label.form-label Expiry Date
-                input(type="text" class="form-control" placeholder="MM/YY")
-              .col-md-6
-                label.form-label CVV
-                input(type="text" class="form-control" placeholder="***")
-            .mb-3
-              label.form-label Cardholder Name
-              input(type="text" class="form-control" placeholder="Name on card")
-
       .col-lg-5
         // Price Summary
         h2.section-title Price Summary
         .booking-summary
           .booking-header
-            h5.mb-0 Booking Details
-          .summary-item
-            span Room Type
-            span Urban
-          .summary-item
-            span Check In
-            span 29/03/2025
-          .summary-item
-            span Check Out
-            span 30/03/2025 (1 night)
-          .summary-item
-            span Guests
-            span 3 Guests
+            h5.mb-0 Summary
           .price-summary
             h6.mb-3 Price Details
             .price-row
               span Room Charge
-              span $7.99
+              span#room-charge
+            .price-row
+              span Service Charge:
+              span#service-charge
             .price-row
               span Discount
-              span -$2.00
+              span#discount-amount
             .price-row.total
               span Total Price
-              span.price-badge $5.99
+              span#total-price.price-badge
             .free-cancel
               i.fas.fa-check-circle.me-1
               | Free cancellation 1 day prior to stay

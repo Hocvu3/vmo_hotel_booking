@@ -1,6 +1,15 @@
 const env = require('../config/env');
-const { Room, Price, Booking, Booking_Service } = require('../models/db');
+const {
+  Room,
+  Price,
+  Booking,
+  Booking_Service,
+  Category,
+  User,
+  Service,
+} = require('../models/db');
 const apiResponse = require('../utils/apiResponse');
+const { Sequelize } = require('sequelize');
 
 const createBooking = async (req, res) => {
   const { room_id, user_id, check_in, check_out, number_of_guest, service_id } =
@@ -30,4 +39,38 @@ const createBooking = async (req, res) => {
   }
 };
 
-module.exports = { createBooking };
+// Get booking detail
+const getBooking = async (req, res) => {
+  const { bookingId } = req.params;
+  try {
+    // Eager loading
+    const booking = await Booking.findByPk(bookingId, {
+      include: [
+        { model: Room, include: [{ model: Category }, { model: Price }] },
+        { model: User },
+        {
+          model: Booking_Service,
+          include: [
+            {
+              model: Service,
+              include: [
+                {
+                  model: Price,
+                  required: false,
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    if (!booking) {
+      return apiResponse(res, 404, 'Booking not found');
+    }
+    apiResponse(res, 200, 'success', { booking });
+  } catch (err) {
+    console.error(err);
+    apiResponse(res, 500, 'Server Error', { error: err.message });
+  }
+};
+module.exports = { createBooking, getBooking };

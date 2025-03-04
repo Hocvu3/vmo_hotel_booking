@@ -104,7 +104,7 @@ block content
                     label.form-check-label(for=`service-${service.id}`) 
                       | #{service.name} - $#{service.prices && service.prices.length > 0 ? service.prices[0].amount : 'N/A'}
                 small.text-muted.d-block.mt-2 Book now, You won’t be charged yet!
-              button.btn.btn-warning.w-100  Book Now
+              button.btn.btn-warning.w-100  Confirm Booking
     script.
       document.addEventListener("DOMContentLoaded", function() {
         let today = new Date().toISOString().split("T")[0]; 
