@@ -780,10 +780,23 @@ Show alert
   border-top: 1px solid #eee;
 }
 
+/* .price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+} */
 .price-row {
   display: flex;
   justify-content: space-between;
   margin-bottom: 10px;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  color: #333;
+  padding: 5px 0;
+}
+
+.price-row:last-child {
+  border-bottom: none;
 }
 
 .price-row.total {

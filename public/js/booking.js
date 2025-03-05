@@ -129,7 +129,7 @@ const updateBookingSummary = async (bookingId) => {
 
           // Create span for name of services
           const nameSpan = document.createElement('span');
-          nameSpan.textContent = serviceName;
+          nameSpan.textContent = `${serviceName}`;
 
           // Create span for prices of services
           const priceSpan = document.createElement('span');

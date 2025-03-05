@@ -13,7 +13,9 @@ const createPaymentIntent = async (req, res) => {
       ],
     });
     if (!booking) return res.status(404).json({ message: 'Booking not found' });
-
+    // Fix amount
+    const fixedTotalAmount = parseFloat(total_amount).toFixed(2); // Parse to float first, then fix.
+    const stripeAmount = Math.round(fixedTotalAmount * 100); // Stripe uses cents
     // Create Session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -29,13 +31,12 @@ const createPaymentIntent = async (req, res) => {
               name: `${booking.room.name} Room`,
               description: booking.room.description,
             },
-            unit_amount: total_amount * 100,
+            unit_amount: stripeAmount,
           },
           quantity: 1,
         },
       ],
     });
-
     // Store payment
     const payment = await Payment.create({
       bookingId: booking_id,
@@ -45,7 +46,6 @@ const createPaymentIntent = async (req, res) => {
       transaction_id: session.id,
       total_price: total_amount,
     });
-    // console.log(payment);
     res.status(200).json({ status: 'success', session });
   } catch (err) {
     console.log(err.message);
