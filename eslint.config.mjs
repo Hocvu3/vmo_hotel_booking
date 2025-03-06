@@ -3,7 +3,7 @@ import globals from 'globals';
 /** @type {import('eslint').Linter.FlatConfig[]} */
 export default [
   {
-    files: ['**/*.js'], // Áp dụng cho tất cả các file JS
+    files: ['**/*.js'],
     languageOptions: {
       ecmaVersion: 'latest',
       globals: { ...globals.es2021 },
@@ -11,7 +11,7 @@ export default [
   },
   {
     // Cấu hình cho Frontend (ES6 Modules)
-    files: ['public/**/*.js', 'client/**/*.js'], // Thay đổi theo thư mục frontend của bạn
+    files: ['public/**/*.js', 'client/**/*.js'],
     languageOptions: {
       sourceType: 'module',
       globals: { ...globals.browser },
@@ -19,8 +19,8 @@ export default [
   },
   {
     // Cấu hình cho Backend (CommonJS)
-    files: ['**/*.js'], // Áp dụng cho tất cả các file JS
-    ignores: ['public/**/*.js', 'client/**/*.js'], // Bỏ qua frontend
+    files: ['**/*.js'],
+    ignores: ['public/**/*.js', 'client/**/*.js'],
     languageOptions: {
       sourceType: 'commonjs',
       globals: { ...globals.node },
