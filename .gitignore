@@ -28,3 +28,5 @@ apphosting.yaml
 database.rules.json
 firebase.json
 functions/
+
+serviceAccount.json
