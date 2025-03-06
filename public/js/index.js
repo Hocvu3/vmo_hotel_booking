@@ -4,10 +4,15 @@ import { showAlert } from './alert';
 import { login, logout } from './login';
 import { updateInfo } from './settings';
 import { createPayment } from './payment';
-import { createBooking, updateBookingSummary } from './booking';
+import { app, messaging, requestPermission } from './firebase-client';
+import { createBooking, updateBookingSummary, getDiscount } from './booking';
 
 console.log('hello from parcel, this is only a test, we will remove soodn');
 
+// Notification
+requestPermission();
+
+// Others
 document.addEventListener('DOMContentLoaded', () => {
   // Login
   const loginForm = document.querySelector('.form');
@@ -99,6 +104,22 @@ document.addEventListener('DOMContentLoaded', () => {
           parseFloat(total_amount_text.replace('$', '')) || 0;
         createPayment(bookingId, total_amount);
       }
+    });
+  }
+
+  // Apply discount
+  const discountInput = document.querySelector('.discount-field input');
+  const applyButton = document.querySelector('.discount-field button');
+
+  if (discountInput && applyButton) {
+    applyButton.addEventListener('click', () => {
+      const discountCode = discountInput.value.trim();
+
+      if (discountCode === '') {
+        showAlert('error', 'Please enter a discount code.');
+        return;
+      }
+      getDiscount(discountCode);
     });
   }
 });

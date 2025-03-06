@@ -7,9 +7,10 @@ const {
   Category,
   User,
   Service,
+  Discount,
 } = require('../models/db');
 const apiResponse = require('../utils/apiResponse');
-const { Sequelize } = require('sequelize');
+const { Sequelize, Op } = require('sequelize');
 
 const createBooking = async (req, res) => {
   const { room_id, user_id, check_in, check_out, number_of_guest, service_id } =
@@ -73,4 +74,40 @@ const getBooking = async (req, res) => {
     apiResponse(res, 500, 'Server Error', { error: err.message });
   }
 };
-module.exports = { createBooking, getBooking };
+
+const getDiscount = async (req, res) => {
+  let discount_code = req.body.discount_code;
+  try {
+    const result = await Discount.findOne({
+      where: {
+        code: discount_code,
+      },
+    });
+
+    if (result) {
+      const expirationDate = new Date(
+        result.expiration_date.getFullYear(),
+        result.expiration_date.getMonth(),
+        result.expiration_date.getDate()
+      );
+      const currentDate = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate()
+      );
+
+      if (expirationDate >= currentDate) {
+        apiResponse(res, 200, 'success', result);
+      } else {
+        apiResponse(res, 404, 'failed', { message: 'Discount code expired.' });
+      }
+    } else {
+      apiResponse(res, 404, 'failed', { message: 'Discount code not found.' });
+    }
+  } catch (err) {
+    console.error('Error fetching discount:', err);
+    apiResponse(res, 500, 'Server error', { message: err.message });
+  }
+};
+
+module.exports = { createBooking, getBooking, getDiscount };
