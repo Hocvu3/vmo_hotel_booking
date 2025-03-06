@@ -13,6 +13,11 @@ const env = {
   DB_PASSWORD: process.env.DB_PASSWORD,
   DB_HOST: process.env.DB_HOST,
   DB_DIALECT: process.env.DB_DIALECT,
+
+  // Stripe
+  Publishable_key: process.env.Publishable_key,
+  STRIPE_SECRET_KEY: process.env.Secret_key,
+  WEBHOOK_SECRET: process.env.WEBHOOK_SECRET,
 };
 
 module.exports = env;

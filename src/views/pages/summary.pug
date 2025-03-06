@@ -1,0 +1,80 @@
+extends ../layouts/main.pug
+
+block content
+  .container.my-5
+    .row.booking-summary
+      .col-lg-7.mb-4.mb-lg-0
+        // Booking Details
+        h2.section-title Stay Details
+
+        // Dates Section
+        .booking-summary.mb-4
+          .booking-header
+            h5#room-name.mb-0 Name of rooms
+          .p-3
+            .row.mb-3
+              .col-md-6.mb-3.mb-md-0
+                label.form-label Check-In Date
+                .date-input
+                  i.fas.fa-calendar
+                  span#check-in-date 29/03/2025
+              .col-md-6
+                label.form-label Check-Out Date
+                .date-input
+                  i.fas.fa-calendar
+                  span#check-out-date 29/03/2025
+            .row.mb-3
+              .col-md-6.mb-3.mb-md-0
+                label.form-label Name
+                .guest-input
+                  i.fas.fa-user
+                  span#guest-name name of booker
+              .col-md-6
+                label.form-label Email
+                .room-input
+                  i.fas.fa-bed
+                  span#user-email email
+            .row.mb-3
+              .col-md-6.mb-3.mb-md-0
+                label.form-label Room type
+                .guest-input
+                  i.fas.fa-user
+                  span#room-type Urban
+              .col-md-6
+                label.form-label Services
+                select#service-dropdown.form-select.guest-input
+        // Discount Section
+        .discount-section.mb-4
+          h5.mb-3 Discount Code
+          .discount-field
+            input(type="text" class="form-control" placeholder="Enter discount code")
+            button.btn.px-4 Apply
+      .col-lg-5
+        // Price Summary
+        h2.section-title Price Summary
+        .booking-summary
+          .booking-header
+            h5.mb-0 Summary
+          .price-summary
+            h6.mb-3 Price Details
+            .price-row
+              span Room Charge
+              span#room-charge
+            .price-row
+              span Service Charge:
+              span#service-charge
+            .price-row
+              span Discount
+              span#discount-amount
+            .price-row.total
+              span Total Price
+              span#total-price.price-badge
+            .free-cancel
+              i.fas.fa-check-circle.me-1
+              | Free cancellation 1 day prior to stay
+        .mt-4
+          p.mb-3.small.text-muted
+            | By clicking "Book Now", you agree to our Terms of Service and Privacy Policy.
+          button.btn.btn-book Book Now
+          p.small.text-center.mt-3.text-muted
+            | You won't be charged yet!

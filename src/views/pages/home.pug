@@ -1,49 +1,131 @@
 extends ../layouts/main.pug
 
 block content
-    .hero-section
-        .container
-            h1 Discover your perfect stay around the globe
-            p Enter your dates to see the latest prices and begin your journey of relaxation and adventure today.
-            .search-box
-                .row.align-items-center
-                    .col-md-3
-                        input.form-control(type="text" placeholder="Pune" value="Pune")
-                    .col-md-3
-                        input.form-control(type="date" placeholder="Check-in")
-                    .col-md-3
-                        input.form-control(type="date" placeholder="Check-out")
-                    .col-md-2
-                        input.form-control(type="number" placeholder="No. Of Guests")
-                    .col-md-1
-                        button.search-button SEARCH
-    .container.my-5
-        h2.text-center.mb-4 Book Hotels at Popular Destinations
-        .row
-            each destination in ['Mumbai', 'Bangkok', 'London', 'Dubai', 'Oslo']
-                .col
-                    .destination-card
-                        img(src="/api/placeholder/300/200" alt=destination)
-                        p.mt-2= destination
-    .container.my-5
-        h2.text-center.mb-4 Handpicked nearby rooms for you
+  .hero-section
+    .container
+      h1 Discover your perfect stay around the globe
+      p Enter your dates to see the latest prices and begin your journey of relaxation and adventure today.
+      .search-box
+        .row.align-items-center
+          .col-md-3
+            input.form-control(type="text" placeholder="Pune" value="Pune")
+          .col-md-3
+            input.form-control(type="date" placeholder="Check-in")
+          .col-md-3
+            input.form-control(type="date" placeholder="Check-out")
+          .col-md-2
+            input.form-control(type="number" placeholder="No. Of Guests")
+          .col-md-1
+            button.search-button SEARCH
+
+  .container.my-5
+    h2.text-center.mb-4 Book Hotels at Popular Destinations
+    .row
+      each destination in ['Mumbai', 'Bangkok', 'London', 'Dubai', 'Oslo']
+        .col
+          .destination-card
+            img(src='https://placehold.co/150x150' alt=destination)
+            p.mt-2= destination
+
+  .container.my-5
+    .row
+      //- Left sidebar with filters
+      .col-md-3
+        .filter-sidebar.p-3.border.rounded
+          .d-flex.justify-content-between.align-items-center.mb-3
+            h5.m-0.fw-bold FILTERS
+            button.btn.btn-sm.btn-outline-secondary Clear
+
+          hr.my-2
+
+          h6.mb-2.fw-bold Star ratings
+          .mb-3
+            .form-check
+              input.form-check-input(type="checkbox" id="5star")
+              label.form-check-label(for="5star") 5 Star
+            .form-check
+              input.form-check-input(type="checkbox" id="4star")
+              label.form-check-label(for="4star") 4 Star
+            .form-check
+              input.form-check-input(type="checkbox" id="3star")
+              label.form-check-label(for="3star") 3 Star
+
+          hr.my-2
+
+          h6.mb-2.fw-bold Property type
+          .mb-3
+            .form-check
+              input.form-check-input(type="checkbox" id="hotel")
+              label.form-check-label(for="hotel") Hotel
+            .form-check
+              input.form-check-input(type="checkbox" id="apartment")
+              label.form-check-label(for="apartment") Apartment
+            .form-check
+              input.form-check-input(type="checkbox" id="villa")
+              label.form-check-label(for="villa") Villa
+
+          hr.my-2
+
+          h6.mb-2.fw-bold Price range
+          .mb-3
+            input.form-range(type="range" min="0" max="50000" step="1000")
+            .d-flex.justify-content-between
+              span ₹0
+              span ₹50,000
+
+          hr.my-2
+
+          h6.mb-2.fw-bold Amenities
+          .mb-3
+            .form-check
+              input.form-check-input(type="checkbox" id="wifi")
+              label.form-check-label(for="wifi") Free WiFi
+            .form-check
+              input.form-check-input(type="checkbox" id="breakfast")
+              label.form-check-label(for="breakfast") Free Breakfast
+            .form-check
+              input.form-check-input(type="checkbox" id="pool")
+              label.form-check-label(for="pool") Swimming Pool
+            .form-check
+              input.form-check-input(type="checkbox" id="parking")
+              label.form-check-label(for="parking") Free Parking
+
+      //- Right side with rooms list
+      .col-md-9
+        .d-flex.justify-content-between.align-items-center.mb-4
+          h2 Handpicked nearby rooms for you
+          .sort-dropdown
+            select.form-select
+              option(selected) Sort by
+              option Price: Low to High
+              option Price: High to Low
+              option Guest Rating
+              option Distance from Center
+        script.
+          var rooms = !{JSON.stringify(rooms, null, 2)}
+          console.log("Rooms data:", rooms)
         each room in rooms
-            .hotel-card
-                .row
-                    .col-md-3
-                        img.hotel-image(src=(room.images && room.images.length > 0) ? room.images[0].image_url : '/img/default.png', alt=room.name)
-                    .col-md-7
-                        h4= room.name
-                        p.text-muted= room.status 
-                        //- each feature in room.features
-                        //-     p.feature-check ✓= feature
-                    .col-md-2.text-end
-                        span.star-rating= room.max_guests + ' ★'
-                        p.mt-3 #{room.price ? room.price.amount : 50} USD
-                        button.book-now(onclick=`window.location.href='/room/${room.id}'`) Book now
-        .pagination
-            if currentPage > 1
-                a(href=`?page=${currentPage - 1}`) Previous
-            if currentPage < totalPages
-                a(href=`?page=${currentPage + 1}`) Next
+          .hotel-card.mb-4.p-3.border.rounded.shadow-sm
+            .row
+              .col-md-3
+                img.hotel-image.img-fluid.rounded(src=(room.images && room.images.length > 0) ? room.images[0].image_url : '/img/default.png', alt=room.name)
+              .col-md-7
+                h4.mb-2= room.name
+                p.text-muted.mb-3= room.status || 'Location information'
+                p.text-muted.mb-3= room.hotel.address || 'Location information'
+                .features
+                  p.feature-check.mb-1 ✓ Free cancellation
+                  p.feature-check.mb-1 ✓ No prepayment needed
+              .col-md-2.text-end.d-flex.flex-column.justify-content-between
+                .rating
+                  span.star-rating.badge.bg-primary.p-2= room.max_guests + ' ★'
+                .price-section.mt-3
+                  p.price.fw-bold.mb-1 $#{room.price ? room.price.amount : 18900}
+                  button.btn.btn-warning.w-100(onclick=`window.location.href='/room/${room.id}'`) View Detail
+
+        .pagination.d-flex.justify-content-center.mt-4
+          if currentPage > 1
+            a.btn.btn-outline-primary.me-2(href=`?page=${currentPage - 1}`) Previous
+          if currentPage < totalPages
+            a.btn.btn-outline-primary(href=`?page=${currentPage + 1}`) Next
 
