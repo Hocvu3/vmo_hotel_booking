@@ -8,7 +8,6 @@ const saveUserToken = (req, res) => {
 };
 
 const sendNotification = async (req, res) => {
-  console.log('Receive request:', req.body);
   const { title, body, token } = req.body;
 
   let tokens = getTokens();
@@ -24,14 +23,6 @@ const sendNotification = async (req, res) => {
 
   const message = {
     notification: { title, body },
-    android: {
-      notification: {
-        sound: 'default',
-        priority: 'high',
-      },
-    },
-    data: { click_action: 'FLUTTER_NOTIFICATION_CLICK' }, // Mobile app
-    //9a0619a8-51c7-4ef1-bf5d-32536a724697
     tokens,
   };
   try {
@@ -50,8 +41,4 @@ const sendNotification = async (req, res) => {
   }
 };
 
-const renderNotificationPage = (req, res) => {
-  res.render('notification');
-};
-
-module.exports = { saveUserToken, sendNotification, renderNotificationPage };
+module.exports = { saveUserToken, sendNotification };

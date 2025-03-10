@@ -4,7 +4,6 @@ const notificationController = require('../controllers/notification.controller')
 
 expressRouter
   .post('/save-token', notificationController.saveUserToken)
-  .post('/send-notification', notificationController.sendNotification)
-  .get('/notification', notificationController.renderNotificationPage);
+  .post('/send-notification', notificationController.sendNotification);
 
 module.exports = expressRouter;

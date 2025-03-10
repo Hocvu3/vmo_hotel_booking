@@ -1,9 +1,0 @@
-extends ../layouts/main.pug
-
-block content
-    form(action="/send-notification" method="POST")
-        label(for="title") Title:
-        input(type="text" id="title" name="title" required)
-        label(for="body") Content:
-        input(type="text" id="body" name="body" required)
-        button(type="submit") Send Notification

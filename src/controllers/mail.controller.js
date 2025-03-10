@@ -1,16 +1,13 @@
 const MailModel = require('../models/mail.model');
 
 class MailController {
-  static renderSendMailPage(req, res) {
-    res.render('sendMail');
-  }
-
+  // Send
   static async sendMail(req, res) {
-    const { to, subject, text } = req.body;
+    const { to, subject, text, customLink } = req.body;
 
     if (!to || !subject || !text) {
       return res.status(400).json({
-        success: false,
+        status: 'false',
         message: 'Missed information: to, subject, text',
       });
     }
