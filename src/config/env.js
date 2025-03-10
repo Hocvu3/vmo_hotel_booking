@@ -18,6 +18,10 @@ const env = {
   Publishable_key: process.env.Publishable_key,
   STRIPE_SECRET_KEY: process.env.Secret_key,
   WEBHOOK_SECRET: process.env.WEBHOOK_SECRET,
+
+  // Email
+  EMAIL_USER: process.env.EMAIL_USER,
+  EMAIL_PASS: process.env.EMAIL_PASS,
 };
 
 module.exports = env;

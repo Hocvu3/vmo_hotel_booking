@@ -156,4 +156,25 @@ const updateBookingSummary = async (bookingId) => {
     showAlert('error', 'Error while fetching data. Try again');
   }
 };
-export { createBooking, updateBookingSummary };
+
+// Apply coupon
+const getDiscount = async (discount) => {
+  try {
+    const res = await axios({
+      method: 'GET',
+      url: '/api/v1/bookings/discount',
+      data: {
+        discount_code: discount,
+      },
+    });
+    if (res.data.status === 'success') {
+      showAlert('success', 'Coupon applied');
+    } else {
+      showAlert('error', 'Invalid coupon');
+    }
+  } catch (err) {
+    console.error('Error:', err);
+    showAlert('error', 'Error while fetching data. Try again');
+  }
+};
+export { createBooking, updateBookingSummary, getDiscount };

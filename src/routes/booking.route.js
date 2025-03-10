@@ -4,5 +4,6 @@ const bookingRouter = express.Router();
 
 bookingRouter.post('/', bookingController.createBooking);
 bookingRouter.get('/:bookingId', bookingController.getBooking);
+bookingRouter.get('/discount', bookingController.getDiscount);
 
 module.exports = bookingRouter;
