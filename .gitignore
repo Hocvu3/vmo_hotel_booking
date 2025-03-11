@@ -21,3 +21,12 @@ data/
 
 # Bỏ qua file cache
 .parcel-cache/
+
+# Skip file firebase
+.firebaserc
+apphosting.yaml
+database.rules.json
+firebase.json
+functions/
+
+serviceAccount.json

@@ -42,6 +42,13 @@ const Room = sequelize.define(
   },
   {
     timestamps: true, //Auto create Created_at and Updated_at
+    indexes: [
+      {
+        fields: ['name'],
+        name: 'idx_room_name',
+      },
+      {},
+    ],
   }
 );
 

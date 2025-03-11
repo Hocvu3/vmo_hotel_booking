@@ -4,7 +4,7 @@ const verifyStripeWebhook = require('../middlewares/verifyStripeWebhook.middlewa
 const webhookRouter = express.Router();
 
 webhookRouter.post(
-  '/',
+  '/webhook',
   express.raw({ type: 'application/json' }),
   verifyStripeWebhook,
   handleWebhook
