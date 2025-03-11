@@ -75,7 +75,8 @@ async function handleCheckoutSessionCompleted(session) {
       tokens: tokens,
     };
     try {
-      responses = await messaging.sendEachForMulticast(notificationMessage);
+      const responses =
+        await messaging.sendEachForMulticast(notificationMessage);
       console.log('send notification successfully');
     } catch (err) {
       console.log('error', err.message);

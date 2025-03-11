@@ -47,19 +47,23 @@ const Room = sequelize.define(
         fields: ['name'],
         name: 'idx_room_name',
       },
-      {},
+      {
+        fields: ['description'],
+        name: 'idx_room_description',
+      },
     ],
   }
 );
 
 //Relationship
+
 Room.hasMany(Booking, { foreignKey: 'roomId', onDelete: 'CASCADE' });
 Booking.belongsTo(Room, { foreignKey: 'roomId' });
 
 Room.hasMany(Image);
 Image.belongsTo(Room);
 
-Room.hasOne(Price);
-Price.belongsTo(Room);
+Room.hasOne(Price, { foreignKey: 'roomId' });
+Price.belongsTo(Room, { foreignKey: 'roomId' });
 
 module.exports = Room;

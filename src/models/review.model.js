@@ -31,6 +31,12 @@ const Review = sequelize.define(
   },
   {
     timestamps: true,
+    indexes: [
+      {
+        fields: ['comment'],
+        name: 'idx_review_comment',
+      },
+    ],
   }
 );
 

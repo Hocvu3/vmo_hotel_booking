@@ -93,14 +93,16 @@ block content
       //- Right side with rooms list
       .col-md-9
         .d-flex.justify-content-between.align-items-center.mb-4
-          h2 Handpicked nearby rooms for you
+          h2#room-list Handpicked nearby rooms for you
           .sort-dropdown
-            select.form-select
-              option(selected) Sort by
-              option Price: Low to High
-              option Price: High to Low
-              option Guest Rating
-              option Distance from Center
+            form(method="get") 
+              input(type="hidden", name="page", value=currentPage)
+              select.form-select(name='sortBy', onchange='this.form.submit()')
+                option(value='', selected=sortBy===undefined) Sort by
+                option(value='Price: Low to High', selected=sortBy==='Price: Low to High') Price: Low to High
+                option(value='Price: High to Low', selected=sortBy==='Price: High to Low') Price: High to Low
+                option(value='Rating: Low to High', selected=sortBy==='Price: Low to High') Rating: Low to High
+                option(value='Rating: High to Low', selected=sortBy==='Rating: High to Low') Rating: High to Low
         script.
           var rooms = !{JSON.stringify(rooms, null, 2)}
           console.log("Rooms data:", rooms)
@@ -114,11 +116,12 @@ block content
                 p.text-muted.mb-3= room.status || 'Location information'
                 p.text-muted.mb-3= room.hotel.address || 'Location information'
                 .features
-                  p.feature-check.mb-1 ✓ Free cancellation
-                  p.feature-check.mb-1 ✓ No prepayment needed
+                  p.feature-check.mb-1 Capacity: #{room.max_guests || '1'}
+                  p.feature-check.mb-1 ✓ No prepayment needed | ✓ Free cancellation
               .col-md-2.text-end.d-flex.flex-column.justify-content-between
-                .rating
-                  span.star-rating.badge.bg-primary.p-2= room.max_guests + ' ★'
+                .rating.d-flex.flex-column.align-items-end
+                  span.star-rating.badge.bg-primary.p-2= room.hotel.averageRating + ' ★'
+                  button.wishlist-btn.mt-2
                 .price-section.mt-3
                   p.price.fw-bold.mb-1 $#{room.price ? room.price.amount : 18900}
                   button.btn.btn-warning.w-100(onclick=`window.location.href='/room/${room.id}'`) View Detail
@@ -128,4 +131,14 @@ block content
             a.btn.btn-outline-primary.me-2(href=`?page=${currentPage - 1}`) Previous
           if currentPage < totalPages
             a.btn.btn-outline-primary(href=`?page=${currentPage + 1}`) Next
+        script.
+          window.onload = function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('sortBy')) {
+              var roomList = document.getElementById('room-list');
+              if (roomList) {
+                roomList.scrollIntoView({ behavior: 'smooth' });
+              }
+            }
+          };
 
