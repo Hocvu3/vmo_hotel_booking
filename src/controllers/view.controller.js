@@ -1,5 +1,6 @@
 const { Op } = require('sequelize'); // Import Operators
 const apiResponse = require('../utils/apiResponse');
+const roomService = require('../services/room.service');
 const {
   Image,
   Room,
@@ -9,57 +10,24 @@ const {
   Category,
   Service,
 } = require('../models/db');
-const { title } = require('process');
 // Return homepage
 const home = async (req, res) => {
   try {
-    // Pagination
+    // Pagination and average rating
     const page = parseInt(req.query.page) || 1; // Take page from query params
     const limit = 10;
-    const offset = (page - 1) * limit;
-
-    // Count Active Rooms
-    const totalRooms = await Room.count({ where: { status: 'Availlable' } });
-    const totalPages = Math.ceil(totalRooms / limit);
-
-    // Take room and pagination
-    const rooms = await Room.findAll({
-      where: { status: 'Availlable' }, // Take only available rooms
-      limit: limit,
-      offset: offset, // Skip previous records
-      order: [['createdAt', 'DESC']],
-      include: [
-        {
-          model: Image,
-          as: 'images',
-          attributes: ['image_url'], // Take attributes from array.
-        },
-        {
-          model: Price,
-          as: 'price',
-          attributes: ['amount'],
-          required: true, // Same as INNER JOIN
-          where: { amount: { [Op.gt]: 0 } },
-        },
-        {
-          model: Hotel,
-          as: 'hotel',
-          attributes: ['name', 'address'],
-          include: [
-            {
-              model: Review,
-              as: 'reviews',
-              attributes: ['rating'],
-            },
-          ],
-        },
-      ],
-    });
+    const sortBy = req.query.sortBy;
+    const { rooms, totalPages } = await roomService.getRoomsWithParameters(
+      page,
+      limit,
+      sortBy
+    );
     return res.status(200).render('home', {
       title: 'Home Page',
       rooms,
       currentPage: page,
       totalPages: totalPages,
+      sortBy: sortBy,
     });
   } catch (error) {
     return res

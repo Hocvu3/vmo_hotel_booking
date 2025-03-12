@@ -19,8 +19,17 @@ const Price = sequelize.define(
       type: DataTypes.UUID,
       allowNull: false,
     },
+    roomId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'rooms',
+        key: 'id',
+      },
+    },
   },
   {
+    tableName: 'prices',
     timestamps: true,
   }
 );

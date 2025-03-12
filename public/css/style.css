@@ -280,6 +280,30 @@
   border-radius: 3px;
 }
 
+.wishlist-btn {
+  background: white;
+  color: #d3d3d3;
+  border: 1px solid #e0e0e0;
+  border-radius: 3px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: fit-content;
+  font-size: 14px;
+}
+
+.wishlist-btn:hover {
+  color: #daa520;
+}
+
+.wishlist-btn.active {
+  color: #daa520;
+}
+
+.wishlist-btn::before {
+  content: '★';
+}
+
 .book-now {
   background-color: #daa520;
   color: white;

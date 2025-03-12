@@ -7,9 +7,10 @@ const store = async (req, res) => {
     const user = await User.bulkCreate(
       [
         {
-          full_name: 'Michadel Jackson',
+          full_name: 'Hoc_vu',
           date_of_birth: '2003-03-13',
-          email: 'johnson@example.com',
+          email: 'hocvu2003@gmail.com',
+          photo: 'https://placehold.co/150x150',
           password: 'password789',
           passwordConfirm: 'password789',
           role: 'employee',
