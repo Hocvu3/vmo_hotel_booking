@@ -34,61 +34,47 @@ block content
         .filter-sidebar.p-3.border.rounded
           .d-flex.justify-content-between.align-items-center.mb-3
             h5.m-0.fw-bold FILTERS
-            button.btn.btn-sm.btn-outline-secondary Clear
-
+            button.btn.btn-sm.btn-outline-secondary(type="button" onclick="window.location.href='/'") Clear
           hr.my-2
 
-          h6.mb-2.fw-bold Star ratings
-          .mb-3
-            .form-check
-              input.form-check-input(type="checkbox" id="5star")
-              label.form-check-label(for="5star") 5 Star
-            .form-check
-              input.form-check-input(type="checkbox" id="4star")
-              label.form-check-label(for="4star") 4 Star
-            .form-check
-              input.form-check-input(type="checkbox" id="3star")
-              label.form-check-label(for="3star") 3 Star
+          form#filterForm(method="get" action="/")
+            input(type="hidden" name="page" value=currentPage)
+            input(type="hidden" name="sortBy" value=sortBy)
 
-          hr.my-2
+            h6.mb-2.fw-bold Star ratings
+            .mb-3
+              .form-check
+                input.form-check-input(type="checkbox" name="starRatings" value="5" id="5star" onchange="this.form.submit()" checked=starRatings && starRatings.includes(5))
+                label.form-check-label(for="5star") 5 Star
+              .form-check
+                input.form-check-input(type="checkbox" name="starRatings" value="4" id="4star" onchange="this.form.submit()" checked=starRatings && starRatings.includes(4))
+                label.form-check-label(for="4star") 4 Star
+              .form-check
+                input.form-check-input(type="checkbox" name="starRatings" value="3" id="3star" onchange="this.form.submit()" checked=starRatings && starRatings.includes(3))
+                label.form-check-label(for="3star") 3 Star
+              .form-check
+                input.form-check-input(type="checkbox" name="starRatings" value="2" id="2star" onchange="this.form.submit()" checked=starRatings && starRatings.includes(2))
+                label.form-check-label(for="2star") 2 Star
+              .form-check
+                input.form-check-input(type="checkbox" name="starRatings" value="1" id="1star" onchange="this.form.submit()" checked=starRatings && starRatings.includes(1))
+                label.form-check-label(for="1star") 1 Star
 
-          h6.mb-2.fw-bold Property type
-          .mb-3
-            .form-check
-              input.form-check-input(type="checkbox" id="hotel")
-              label.form-check-label(for="hotel") Hotel
-            .form-check
-              input.form-check-input(type="checkbox" id="apartment")
-              label.form-check-label(for="apartment") Apartment
-            .form-check
-              input.form-check-input(type="checkbox" id="villa")
-              label.form-check-label(for="villa") Villa
+            hr.my-2
 
-          hr.my-2
+            h6.mb-2.fw-bold Room types
+            .mb-3
+              each category in categories
+                .form-check
+                  input.form-check-input(type="checkbox" name="roomTypes" value=category.id id=`cat-${category.id}` onchange="this.form.submit()" checked=roomTypes && roomTypes.includes(category.id))
+                  label.form-check-label(for=`cat-${category.id}`) #{category.name}
+            hr.my-2
 
-          h6.mb-2.fw-bold Price range
-          .mb-3
-            input.form-range(type="range" min="0" max="50000" step="1000")
-            .d-flex.justify-content-between
-              span ₹0
-              span ₹50,000
-
-          hr.my-2
-
-          h6.mb-2.fw-bold Amenities
-          .mb-3
-            .form-check
-              input.form-check-input(type="checkbox" id="wifi")
-              label.form-check-label(for="wifi") Free WiFi
-            .form-check
-              input.form-check-input(type="checkbox" id="breakfast")
-              label.form-check-label(for="breakfast") Free Breakfast
-            .form-check
-              input.form-check-input(type="checkbox" id="pool")
-              label.form-check-label(for="pool") Swimming Pool
-            .form-check
-              input.form-check-input(type="checkbox" id="parking")
-              label.form-check-label(for="parking") Free Parking
+            h6.mb-2.fw-bold Price range
+            .mb-3
+              input.form-range(type="range" name="priceRange" min=minPrice max=maxPrice step="5" value=priceRange || maxPrice onchange="this.form.submit()")
+              .d-flex.justify-content-between
+                span $#{minPrice}
+                span $#{maxPrice}
 
       //- Right side with rooms list
       .col-md-9
@@ -113,10 +99,10 @@ block content
                 img.hotel-image.img-fluid.rounded(src=(room.images && room.images.length > 0) ? room.images[0].image_url : '/img/default.png', alt=room.name)
               .col-md-7
                 h4.mb-2= room.name
-                p.text-muted.mb-3= room.status || 'Location information'
-                p.text-muted.mb-3= room.hotel.address || 'Location information'
+                p.text-muted.mb-3 Capacity: #{room.max_guests || '1'} | #{room.category.name || 'Standard'}
+                p.text-muted.mb-1= room.hotel.address || 'Location information'
                 .features
-                  p.feature-check.mb-1 Capacity: #{room.max_guests || '1'}
+                  p.feature-check.mb-1= room.status || 'Location information'
                   p.feature-check.mb-1 ✓ No prepayment needed | ✓ Free cancellation
               .col-md-2.text-end.d-flex.flex-column.justify-content-between
                 .rating.d-flex.flex-column.align-items-end
@@ -127,10 +113,16 @@ block content
                   button.btn.btn-warning.w-100(onclick=`window.location.href='/room/${room.id}'`) View Detail
 
         .pagination.d-flex.justify-content-center.mt-4
-          if currentPage > 1
-            a.btn.btn-outline-primary.me-2(href=`?page=${currentPage - 1}`) Previous
-          if currentPage < totalPages
-            a.btn.btn-outline-primary(href=`?page=${currentPage + 1}`) Next
+          if totalPages > 1
+            nav(aria-label="Page navigation")
+              ul.pagination.justify-content-center
+                li.page-item(class=currentPage === 1 ? 'disabled' : '')
+                  a.page-link(href="#" data-page=currentPage - 1) Previous
+                each pageNum in Array(totalPages).fill().map((_, i) => i + 1)
+                  li.page-item(class=currentPage === pageNum ? 'active' : '')
+                    a.page-link(href="#" data-page=pageNum) #{pageNum}
+                li.page-item(class=currentPage === totalPages ? 'disabled' : '')
+                  a.page-link(href="#" data-page=currentPage + 1) Next
         script.
           window.onload = function() {
             var urlParams = new URLSearchParams(window.location.search);
@@ -140,5 +132,20 @@ block content
                 roomList.scrollIntoView({ behavior: 'smooth' });
               }
             }
+            const pageLinks = document.querySelectorAll('.page-link');
+            pageLinks.forEach(link => {
+              link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const pageNum = link.getAttribute('data-page');
+                const pageInput = document.querySelector('input[name="page"]');
+                const form = document.getElementById('filterForm');
+                if (pageInput && form) {
+                  pageInput.value = pageNum;
+                  form.submit();
+                } else {
+                  console.error('Form or page input not found');
+                }
+              });
+            });
           };
 

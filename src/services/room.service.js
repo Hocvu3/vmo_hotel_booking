@@ -1,96 +1,107 @@
 const { Sequelize, Op } = require('sequelize');
-const { Room, Image, Price, Hotel, Review, Booking } = require('../models/db');
+const { formatRoomData } = require('../utils/dataUtil');
+const { calculatePagination } = require('../helpers/paginationHelper');
+const { buildWhereClauses, getSortOrder } = require('../helpers/queryHelper');
+const { Room, Image, Price, Hotel, Review, Category } = require('../models/db');
 
-async function getRoomsWithParameters(page, limit, sortBy) {
-  try {
-    const offset = (page - 1) * limit;
-    const totalRooms = await Room.count({ where: { status: 'Availlable' } });
-    const totalPages = Math.ceil(totalRooms / limit);
+async function getRoomsWithParameters(
+  page,
+  limit,
+  sortBy,
+  starRatings,
+  roomTypes,
+  priceRange
+) {
+  const { whereClause, hotelWhereClause, priceWhereClause } = buildWhereClauses(
+    starRatings,
+    roomTypes,
+    priceRange
+  );
 
-    // Default sorting
-    let order = [['createdAt', 'DESC']];
+  const filteredRooms = await Room.findAll({
+    where: whereClause,
+    include: [
+      {
+        model: Hotel,
+        as: 'hotel',
+        where: hotelWhereClause,
+        include: [{ model: Review, as: 'reviews', attributes: [] }],
+        required: true,
+      },
+      {
+        model: Price,
+        as: 'price',
+        where: priceWhereClause,
+        attributes: [],
+        required: true,
+      },
+    ],
+    attributes: ['id'],
+    subQuery: false,
+  });
 
-    // Sort by price
-    if (sortBy === 'Price: Low to High') {
-      order = [[{ model: Price, as: 'price' }, 'amount', 'ASC']];
-    } else if (sortBy === 'Price: High to Low') {
-      order = [[{ model: Price, as: 'price' }, 'amount', 'DESC']];
-    }
+  const roomIds = filteredRooms.map((room) => room.id);
+  const { totalPages, offset } = calculatePagination(
+    roomIds.length,
+    page,
+    limit
+  );
+  const order = getSortOrder(sortBy);
 
-    // Sort by rating
-    let ratingOrder = '';
-    if (sortBy === 'Rating: High to Low') {
-      ratingOrder = 'DESC';
-    } else if (sortBy === 'Rating: Low to High') {
-      ratingOrder = 'ASC';
-    }
-
-    const rooms = await Room.findAll({
-      where: { status: 'Availlable' },
-      limit: limit,
-      offset: offset,
-      include: [
-        {
-          model: Image,
-          attributes: ['image_url'],
-          required: false,
-        },
-        {
-          model: Price,
-          as: 'price',
-          attributes: ['amount'],
-          required: false,
-          where: { amount: { [Op.gt]: 0 } },
-        },
-        {
-          model: Hotel,
-          as: 'hotel',
-          attributes: ['id', 'name', 'address'],
-          include: [
-            {
-              model: Review,
-              as: 'reviews',
-              attributes: [],
-              required: false,
-            },
-          ],
-        },
+  const rooms = await Room.findAll({
+    where: { id: { [Op.in]: roomIds } },
+    limit,
+    offset,
+    include: [
+      { model: Image, attributes: ['image_url'], required: false },
+      {
+        model: Price,
+        as: 'price',
+        attributes: ['amount'],
+        where: priceWhereClause,
+        required: true,
+      },
+      {
+        model: Hotel,
+        as: 'hotel',
+        attributes: ['id', 'name', 'address'],
+        where: hotelWhereClause,
+        include: [{ model: Review, as: 'reviews', attributes: [] }],
+        required: true,
+      },
+      {
+        model: Category,
+        as: 'category',
+        attributes: ['name'],
+        required: false,
+      },
+    ],
+    attributes: [
+      'id',
+      'status',
+      'name',
+      'max_guests',
+      'hotel_id',
+      [
+        require('sequelize').fn(
+          'AVG',
+          require('sequelize').col('"hotel"."reviews"."rating"')
+        ),
+        'averageRating',
       ],
-      attributes: [
-        'id',
-        'status',
-        'name',
-        'max_guests',
-        'hotel_id',
-        [
-          Sequelize.fn('AVG', Sequelize.col('"hotel"."reviews"."rating"')),
-          'averageRating',
-        ],
-      ],
-      group: ['"room"."id"', '"images"."id"', '"price"."id"', '"hotel"."id"'],
-      order: ratingOrder
-        ? [[Sequelize.literal('"averageRating"'), ratingOrder]] // Quote the alias
-        : order,
-      subQuery: false,
-    });
+    ],
+    group: [
+      '"room"."id"',
+      '"category"."id"',
+      '"images"."id"',
+      '"price"."id"',
+      '"hotel"."id"',
+    ],
+    order,
+    subQuery: false,
+  });
 
-    // Convert to plain JSON and format the response
-    const roomsWithAverageRating = rooms.map((room) => {
-      const plainRoom = room.get({ plain: true });
-      return {
-        ...plainRoom,
-        hotel: {
-          ...plainRoom.hotel,
-          averageRating: parseFloat(plainRoom.averageRating) || 0,
-        },
-      };
-    });
-
-    return { rooms: roomsWithAverageRating, totalPages };
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
+  return { rooms: formatRoomData(rooms), totalPages };
 }
 
 module.exports = { getRoomsWithParameters };

@@ -10,8 +10,8 @@ const mailRouter = require('./src/routes/mail.route');
 const bookingRouter = require('./src/routes/booking.route');
 const webhookRouter = require('./src/routes/webhook.route');
 const paymentRouter = require('./src/routes/payment.route');
-const errorHandler = require('./src/middlewares/error.middleware');
 const notificationRouter = require('./src/routes/notification.route');
+const { handleErrors } = require('./src/middlewares/error.middleware');
 
 // Set view engine
 app.set('view engine', 'pug');
@@ -43,6 +43,6 @@ app.use('/', viewRouter);
 
 // Put all middlewares after router
 // Error handling middleware
-app.use(errorHandler);
+app.use(handleErrors);
 
 module.exports = app;
