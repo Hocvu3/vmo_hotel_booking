@@ -20,8 +20,8 @@ const createPaymentIntent = async (req, res) => {
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
-      success_url: `${req.protocol}://${req.get('host')}/`,
-      cancel_url: `${req.protocol}://${req.get('host')}/`,
+      success_url: `${req.protocol}://${req.get('host')}/success_url`,
+      cancel_url: `${req.protocol}://${req.get('host')}`,
       client_reference_id: req.params.id,
       line_items: [
         {
@@ -48,7 +48,6 @@ const createPaymentIntent = async (req, res) => {
     });
     res.status(200).json({ status: 'success', session });
   } catch (err) {
-    console.log(err.message);
     res.status(500).json({ message: err.message });
   }
 };

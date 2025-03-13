@@ -2,7 +2,10 @@ const { Sequelize, Op } = require('sequelize'); // Import Operators
 const apiResponse = require('../utils/apiResponse');
 const { getPriceRange } = require('../utils/dbUtil');
 const roomService = require('../services/room.service');
-const { parseQueryParams } = require('../helpers/queryHelper');
+const {
+  parseQueryParams,
+  parseSearchParams,
+} = require('../helpers/queryHelper');
 const {
   Image,
   Room,
@@ -13,32 +16,46 @@ const {
   Service,
 } = require('../models/db');
 // Return homepage
-const home = async (req, res) => {
-  const { page, limit, sortBy, starRatings, roomTypes, priceRange } =
-    parseQueryParams(req);
+const getHomePage = async (req, res) => {
+  const params = parseQueryParams(req);
   const { minPrice, maxPrice } = await getPriceRange();
   const categories = await Category.findAll({ attributes: ['id', 'name'] });
-  const { rooms, totalPages } = await roomService.getRoomsWithParameters(
-    page,
-    limit,
-    sortBy,
-    starRatings,
-    roomTypes,
-    priceRange
-  );
-
-  return res.status(200).render('home', {
+  const { rooms, totalPages } = await roomService.searchRooms(params);
+  return res.render('home', {
     title: 'Home Page',
     rooms,
-    currentPage: page,
+    currentPage: params.page,
     totalPages: totalPages || 1,
-    sortBy,
-    starRatings,
-    roomTypes,
-    categories: categories.map((cat) => cat.get({ plain: true })),
     minPrice,
     maxPrice,
-    priceRange,
+    categories: categories.map((cat) => cat.get({ plain: true })),
+  });
+};
+
+// Search
+const searchRoom = async (req, res) => {
+  const params = parseQueryParams(req);
+  const { minPrice, maxPrice } = await getPriceRange();
+  const categories = await Category.findAll({ attributes: ['id', 'name'] });
+  const { rooms, totalPages } = await roomService.searchRooms(params);
+  return res.status(200).render('home', {
+    title: 'Search Results',
+    rooms,
+    currentPage: params.page,
+    totalPages: totalPages || 1,
+    sortBy: params.sortBy,
+    starRatings: params.starRatings,
+    roomTypes: params.roomTypes,
+    priceRange: params.priceRange,
+    searchParams: {
+      name: params.name,
+      checkInDate: params.checkInDate,
+      checkOutDate: params.checkOutDate,
+      guests: params.guests,
+    },
+    minPrice,
+    maxPrice,
+    categories: categories.map((cat) => cat.get({ plain: true })),
   });
 };
 
@@ -132,4 +149,19 @@ const dashboard = (req, res) => {
   });
 };
 
-module.exports = { home, roomDetail, summary, login, register, dashboard };
+// Return url
+const returnUrl = (req, res) => {
+  res.status(200).render('booking_success', {
+    title: 'Payment Success',
+  });
+};
+module.exports = {
+  getHomePage,
+  searchRoom,
+  roomDetail,
+  summary,
+  login,
+  register,
+  dashboard,
+  returnUrl,
+};

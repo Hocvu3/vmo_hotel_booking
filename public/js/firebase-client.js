@@ -23,10 +23,10 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker
     .register(new URL('../firebase-messaging-sw.js', import.meta.url)) // Path to public/
     .then((registration) => {
-      console.log('Service Worker registered:', registration);
+      // console.log('Service Worker registered:', registration);
     })
     .catch((error) => {
-      console.error('Service Worker register failed:', error);
+      // console.error('Service Worker register failed:', error);
     });
 }
 
@@ -35,14 +35,11 @@ async function requestPermission() {
   try {
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
-      console.log('Notification permission granted.');
-
       // Grant FCM Token
       const token = await getToken(messaging, {
         vapidKey:
           'BGXzfKANCVJy0r9OuS1C-99J6Zp-jT0jtX_lBgQu0Nfw7PkIR8BDQ7C3mM7C1fHt4uDZdSFL9jXlnE5Vu8etHNk',
       });
-      console.log('FCM Token:', token);
 
       // Call API to save token to backend using axios
       if (token) {
@@ -53,7 +50,6 @@ async function requestPermission() {
           if (response.status === 200) {
             // Axios uses status codes directly
             const data = response.data; // Axios response data is under .data
-            console.log('Token saved successfully:', data.message);
           } else {
             console.error(
               'Failed to save token:',
@@ -75,7 +71,7 @@ async function requestPermission() {
 
 // While opening
 onMessage(messaging, (payload) => {
-  console.log('Message received:', payload);
+  // console.log('Message received:', payload);
   new Notification(payload.notification.title, {
     body: payload.notification.body,
     icon: '/icon.png',

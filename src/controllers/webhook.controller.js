@@ -21,7 +21,7 @@ const handleWebhook = async (req, res) => {
       break;
 
     default:
-      console.log(`Unhandled Event : ${event.type}`);
+    // console.log(`Unhandled Event : ${event.type}`);
   }
   res.json({ received: true });
 };
@@ -62,11 +62,9 @@ async function handleCheckoutSessionCompleted(session) {
         where: { transaction_id: session.id },
       }
     );
-    console.log('Payment updated successfully');
 
     // Push notification
     const tokens = getTokens();
-    console.log(tokens);
     const notificationMessage = {
       notification: {
         title: 'Payment confirmed',
@@ -77,9 +75,8 @@ async function handleCheckoutSessionCompleted(session) {
     try {
       const responses =
         await messaging.sendEachForMulticast(notificationMessage);
-      console.log('send notification successfully');
     } catch (err) {
-      console.log('error', err.message);
+      // console.log('error', err.message);
     }
   } catch (err) {
     console.error('Error in handleCheckoutSessionCompleted:', err);
@@ -122,10 +119,8 @@ async function handleCheckoutSessionExpired(session) {
         where: { transaction_id: session.payment_intent },
       }
     );
-
-    console.log('Payment failed');
   } catch (err) {
-    console.log('Error in handleCheckoutSessionExpired', err.message);
+    // console.log('Error in handleCheckoutSessionExpired', err.message);
   }
 }
 
@@ -160,19 +155,14 @@ async function handleChargeRefunded(charge) {
       where: { transaction_id: charge.payment_intent },
     });
     if (!paymentIntend) {
-      console.log(
-        `Error: Payment record not found for payment_intent: ${charge.payment_intent}`
-      );
       return;
     }
     await Payment.update(
       { status: 'Refunded' },
       { where: { transaction_id: charge.payment_intent } }
     );
-
-    console.log('Payment refunded.');
   } catch (err) {
-    console.log('Error in handleChargeRefunded', err.message);
+    // console.log('Error in handleChargeRefunded', err.message);
   }
 }
 module.exports = { handleWebhook };

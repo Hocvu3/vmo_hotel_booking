@@ -6,18 +6,18 @@ block content
       h1 Discover your perfect stay around the globe
       p Enter your dates to see the latest prices and begin your journey of relaxation and adventure today.
       .search-box
-        .row.align-items-center
-          .col-md-3
-            input.form-control(type="text" placeholder="Pune" value="Pune")
-          .col-md-3
-            input.form-control(type="date" placeholder="Check-in")
-          .col-md-3
-            input.form-control(type="date" placeholder="Check-out")
-          .col-md-2
-            input.form-control(type="number" placeholder="No. Of Guests")
-          .col-md-1
-            button.search-button SEARCH
-
+        form#searchForm(method="get" action="/search")
+          .row.align-items-center
+            .col-md-3
+              input.form-control(type="text" name="name" placeholder="Name, description, v.v.." value=searchParams && searchParams.name ? searchParams.name : '')
+            .col-md-3
+              input#checkInDate.form-control(type="date" name="checkInDate" placeholder="Check-in" value=searchParams && searchParams.checkInDate ? searchParams.checkInDate : '')
+            .col-md-3
+              input#checkOutDate.form-control(type="date" name="checkOutDate" placeholder="Check-out" value=searchParams && searchParams.checkOutDate ? searchParams.checkOutDate : '')
+            .col-md-2
+              input.form-control(type="number" name="guests" placeholder="No. Of Guests" min="1" max="7" value=searchParams && searchParams.guests ? searchParams.guests : '')
+            .col-md-1
+              button.search-button(type="submit" id="searchButton") SEARCH
   .container.my-5
     h2.text-center.mb-4 Book Hotels at Popular Destinations
     .row
@@ -37,9 +37,13 @@ block content
             button.btn.btn-sm.btn-outline-secondary(type="button" onclick="window.location.href='/'") Clear
           hr.my-2
 
-          form#filterForm(method="get" action="/")
+          form#filterForm(method="get" action="/search")
+            input(type="hidden" name="name" value=searchParams && searchParams.name ? searchParams.name : '')
+            input(type="hidden" name="checkInDate" value=searchParams && searchParams.checkInDate ? searchParams.checkInDate : '')
+            input(type="hidden" name="checkOutDate" value=searchParams && searchParams.checkOutDate ? searchParams.checkOutDate : '')
+            input(type="hidden" name="guests" value=searchParams && searchParams.guests ? searchParams.guests : '')
             input(type="hidden" name="page" value=currentPage)
-            input(type="hidden" name="sortBy" value=sortBy)
+            input(type="hidden" name="sortBy" value=sortBy || '')
 
             h6.mb-2.fw-bold Star ratings
             .mb-3
@@ -81,53 +85,70 @@ block content
         .d-flex.justify-content-between.align-items-center.mb-4
           h2#room-list Handpicked nearby rooms for you
           .sort-dropdown
-            form(method="get") 
-              input(type="hidden", name="page", value=currentPage)
-              select.form-select(name='sortBy', onchange='this.form.submit()')
+            form(method="get", action="/search") 
+              //- input(type="hidden", name="page", value=currentPage)
+              input(type="hidden" name="name" value=searchParams && searchParams.name ? searchParams.name : '')
+              input(type="hidden" name="checkInDate" value=searchParams && searchParams.checkInDate ? searchParams.checkInDate : '')
+              input(type="hidden" name="checkOutDate" value=searchParams && searchParams.checkOutDate ? searchParams.checkOutDate : '')
+              input(type="hidden" name="guests" value=searchParams && searchParams.guests ? searchParams.guests : '')
+              input(type="hidden" name="page" value=currentPage)
+              input(type="hidden" name="priceRange" value=priceRange || '')
+              if starRatings && starRatings.length
+                each star in starRatings
+                  input(type="hidden" name="starRatings" value=star)
+              if roomTypes && roomTypes.length
+                each type in roomTypes
+                  input(type="hidden" name="roomTypes" value=type)
+              input(type="hidden" name="priceRange" value=priceRange || '')
+              select.form-select(name='sortBy', onchange="this.form.submit()")
                 option(value='', selected=sortBy===undefined) Sort by
                 option(value='Price: Low to High', selected=sortBy==='Price: Low to High') Price: Low to High
                 option(value='Price: High to Low', selected=sortBy==='Price: High to Low') Price: High to Low
                 option(value='Rating: Low to High', selected=sortBy==='Price: Low to High') Rating: Low to High
                 option(value='Rating: High to Low', selected=sortBy==='Rating: High to Low') Rating: High to Low
-        script.
-          var rooms = !{JSON.stringify(rooms, null, 2)}
-          console.log("Rooms data:", rooms)
-        each room in rooms
-          .hotel-card.mb-4.p-3.border.rounded.shadow-sm
-            .row
-              .col-md-3
-                img.hotel-image.img-fluid.rounded(src=(room.images && room.images.length > 0) ? room.images[0].image_url : '/img/default.png', alt=room.name)
-              .col-md-7
-                h4.mb-2= room.name
-                p.text-muted.mb-3 Capacity: #{room.max_guests || '1'} | #{room.category.name || 'Standard'}
-                p.text-muted.mb-1= room.hotel.address || 'Location information'
-                .features
-                  p.feature-check.mb-1= room.status || 'Location information'
-                  p.feature-check.mb-1 ✓ No prepayment needed | ✓ Free cancellation
-              .col-md-2.text-end.d-flex.flex-column.justify-content-between
-                .rating.d-flex.flex-column.align-items-end
-                  span.star-rating.badge.bg-primary.p-2= room.hotel.averageRating + ' ★'
-                  button.wishlist-btn.mt-2
-                .price-section.mt-3
-                  p.price.fw-bold.mb-1 $#{room.price ? room.price.amount : 18900}
-                  button.btn.btn-warning.w-100(onclick=`window.location.href='/room/${room.id}'`) View Detail
-
-        .pagination.d-flex.justify-content-center.mt-4
-          if totalPages > 1
-            nav(aria-label="Page navigation")
-              ul.pagination.justify-content-center
-                li.page-item(class=currentPage === 1 ? 'disabled' : '')
-                  a.page-link(href="#" data-page=currentPage - 1) Previous
-                each pageNum in Array(totalPages).fill().map((_, i) => i + 1)
-                  li.page-item(class=currentPage === pageNum ? 'active' : '')
-                    a.page-link(href="#" data-page=pageNum) #{pageNum}
-                li.page-item(class=currentPage === totalPages ? 'disabled' : '')
-                  a.page-link(href="#" data-page=currentPage + 1) Next
+                option(value="Name: A to Z" selected=sortBy==='Name: A to Z') Name: A to Z
+                option(value="Name: Z to A" selected=sortBy==='Name: Z to A') Name: Z to A
+        //- script.
+        //-   var rooms = !{JSON.stringify(rooms, null, 2)}
+        //-   console.log("Rooms data:", rooms)
+        if rooms && rooms.length
+          each room in rooms
+            .hotel-card.mb-4.p-3.border.rounded.shadow-sm
+              .row
+                .col-md-3
+                  img.hotel-image.img-fluid.rounded(src=(room.images && room.images.length > 0) ? room.images[0].image_url : '/img/default.png', alt=room.name)
+                .col-md-7
+                  h4.mb-2= room.name
+                  p.text-muted.mb-3 Capacity: #{room.max_guests || '1'} | #{room.category.name || 'Standard'}
+                  p.text-muted.mb-1= room.hotel.address || 'Location information'
+                  .features
+                    p.feature-check.mb-1= room.status || 'Location information'
+                    p.feature-check.mb-1 ✓ No prepayment needed | ✓ Free cancellation
+                .col-md-2.text-end.d-flex.flex-column.justify-content-between
+                  .rating.d-flex.flex-column.align-items-end
+                    span.star-rating.badge.bg-primary.p-2= room.hotel.averageRating + ' ★'
+                    button.wishlist-btn.mt-2
+                  .price-section.mt-3
+                    p.price.fw-bold.mb-1 $#{room.price ? room.price.amount : 18900}
+                    button.btn.btn-warning.w-100(onclick=`window.location.href='/room/${room.id}'`) View Detail
+          .pagination.d-flex.justify-content-center.mt-4
+            if totalPages > 1
+              nav(aria-label="Page navigation")
+                ul.pagination.justify-content-center
+                  li.page-item(class=currentPage === 1 ? 'disabled' : '')
+                    a.page-link(href="#" data-page=currentPage - 1) Previous
+                  each pageNum in Array(totalPages).fill().map((_, i) => i + 1)
+                    li.page-item(class=currentPage === pageNum ? 'active' : '')
+                      a.page-link(href="#" data-page=pageNum) #{pageNum}
+                  li.page-item(class=currentPage === totalPages ? 'disabled' : '')
+                    a.page-link(href="#" data-page=currentPage + 1) Next
+                    //- a.page-link(href=`/search?page=${currentPage + 1}&location=${searchParams.location}&checkInDate=${searchParams.checkInDate}&checkOutDate=${searchParams.checkOutDate}&guests=${searchParams.guests}`) Next
+        else
+          p No rooms found matching your criteria.
         script.
           window.onload = function() {
-            var urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('sortBy')) {
-              var roomList = document.getElementById('room-list');
+            if (window.location.pathname.includes('/search')) {
+              const roomList = document.getElementById('room-list');
               if (roomList) {
                 roomList.scrollIntoView({ behavior: 'smooth' });
               }
@@ -146,6 +167,43 @@ block content
                   console.error('Form or page input not found');
                 }
               });
+            });
+            // Validate check-in check-out date
+            let today = new Date().toISOString().split("T")[0]; 
+            let checkInDate = document.getElementById("checkInDate");
+            let checkOutDate = document.getElementById("checkOutDate");
+
+            // Set min cho Check-in
+            checkInDate.setAttribute("min", today);
+            if (!checkInDate.value) {
+              checkInDate.value = today;
+            }
+            if (!checkOutDate.value) {
+              checkOutDate.value = today;
+            }
+            // Set min cho Check-out
+            checkOutDate.setAttribute("min", today);
+
+            // When Check-in changes
+            checkInDate.addEventListener("change", function() {
+              let checkInDateValue = checkInDate.value;
+
+              // Set min cho Check-out
+              checkOutDate.setAttribute("min", checkInDateValue);
+
+              // If Check-out < Check-in
+              if (checkOutDate.value && checkOutDate.value <= checkInDateValue) {
+                alert("Check-out date must be later than Check-in date!");
+                checkOutDate.value = "";
+              }
+            });
+
+            // When Check-out changes
+            checkOutDate.addEventListener("change", function() {
+              if (checkOutDate.value <= checkInDate.value) {
+                alert("Check-out date must be later than Check-in date!");
+                checkOutDate.value = ""; // Reset if Check-out < Check-in
+              }
             });
           };
 

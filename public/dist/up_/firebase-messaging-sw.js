@@ -20,7 +20,6 @@ if (firebase && firebase.messaging) {
   const messaging = firebase.messaging();
   // Receive notification on background
   messaging.onBackgroundMessage((payload) => {
-    console.log('[Firebase Messaging] Background Message:', payload);
     self.registration.showNotification(payload.notification.title, {
       body: payload.notification.body,
       icon: '/icon.png',

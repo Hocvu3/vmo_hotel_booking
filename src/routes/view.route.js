@@ -5,12 +5,13 @@ const { validateRoomQuery } = require('../validators/query.validator');
 const { errorMiddleware } = require('../middlewares/error.middleware');
 const viewRouter = express.Router();
 
+viewRouter.get('/', authMiddleware.isLoggedIn, viewController.getHomePage);
 viewRouter.get(
-  '/',
+  '/search',
   validateRoomQuery,
   errorMiddleware,
   authMiddleware.isLoggedIn,
-  viewController.home
+  viewController.searchRoom
 );
 viewRouter.get('/login', authMiddleware.isLoggedIn, viewController.login);
 viewRouter.get(
@@ -25,5 +26,10 @@ viewRouter.get(
   viewController.dashboard
 );
 viewRouter.get('/summary', authMiddleware.isLoggedIn, viewController.summary);
+viewRouter.get(
+  '/success_url',
+  authMiddleware.isLoggedIn,
+  viewController.returnUrl
+);
 
 module.exports = viewRouter;

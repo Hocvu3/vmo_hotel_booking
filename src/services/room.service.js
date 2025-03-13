@@ -1,22 +1,35 @@
 const { Sequelize, Op } = require('sequelize');
 const { formatRoomData } = require('../utils/dataUtil');
 const { calculatePagination } = require('../helpers/paginationHelper');
-const { buildWhereClauses, getSortOrder } = require('../helpers/queryHelper');
+const {
+  getSortOrder,
+  buildCombinedWhereClauses,
+} = require('../helpers/queryHelper');
 const { Room, Image, Price, Hotel, Review, Category } = require('../models/db');
 
-async function getRoomsWithParameters(
+// Search
+async function searchRooms({
   page,
   limit,
   sortBy,
   starRatings,
   roomTypes,
-  priceRange
-) {
-  const { whereClause, hotelWhereClause, priceWhereClause } = buildWhereClauses(
-    starRatings,
-    roomTypes,
-    priceRange
-  );
+  priceRange,
+  name,
+  checkInDate,
+  checkOutDate,
+  guests,
+}) {
+  const { whereClause, hotelWhereClause, priceWhereClause, replacements } =
+    buildCombinedWhereClauses({
+      name,
+      checkInDate,
+      checkOutDate,
+      guests,
+      starRatings,
+      roomTypes,
+      priceRange,
+    });
 
   const filteredRooms = await Room.findAll({
     where: whereClause,
@@ -37,6 +50,7 @@ async function getRoomsWithParameters(
       },
     ],
     attributes: ['id'],
+    replacements,
     subQuery: false,
   });
 
@@ -85,7 +99,7 @@ async function getRoomsWithParameters(
       [
         require('sequelize').fn(
           'AVG',
-          require('sequelize').col('"hotel"."reviews"."rating"')
+          Sequelize.col('"hotel"."reviews"."rating"')
         ),
         'averageRating',
       ],
@@ -104,4 +118,4 @@ async function getRoomsWithParameters(
   return { rooms: formatRoomData(rooms), totalPages };
 }
 
-module.exports = { getRoomsWithParameters };
+module.exports = { searchRooms };
