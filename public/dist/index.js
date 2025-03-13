@@ -20270,7 +20270,8 @@ ${frame.code}`;
               token: tokenDetails.token,
               createTime: Date.now(),
               subscriptionOptions,
-            }); // Valid token, nothing to do.
+            });
+          // Valid token, nothing to do.
           else return tokenDetails.token;
         }
         /**

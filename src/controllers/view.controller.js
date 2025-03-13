@@ -1,6 +1,8 @@
-const { Op } = require('sequelize'); // Import Operators
+const { Sequelize, Op } = require('sequelize'); // Import Operators
 const apiResponse = require('../utils/apiResponse');
+const { getPriceRange } = require('../utils/dbUtil');
 const roomService = require('../services/room.service');
+const { parseQueryParams } = require('../helpers/queryHelper');
 const {
   Image,
   Room,
@@ -12,28 +14,32 @@ const {
 } = require('../models/db');
 // Return homepage
 const home = async (req, res) => {
-  try {
-    // Pagination and average rating
-    const page = parseInt(req.query.page) || 1; // Take page from query params
-    const limit = 10;
-    const sortBy = req.query.sortBy;
-    const { rooms, totalPages } = await roomService.getRoomsWithParameters(
-      page,
-      limit,
-      sortBy
-    );
-    return res.status(200).render('home', {
-      title: 'Home Page',
-      rooms,
-      currentPage: page,
-      totalPages: totalPages,
-      sortBy: sortBy,
-    });
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ message: 'Server error', error: error.message });
-  }
+  const { page, limit, sortBy, starRatings, roomTypes, priceRange } =
+    parseQueryParams(req);
+  const { minPrice, maxPrice } = await getPriceRange();
+  const categories = await Category.findAll({ attributes: ['id', 'name'] });
+  const { rooms, totalPages } = await roomService.getRoomsWithParameters(
+    page,
+    limit,
+    sortBy,
+    starRatings,
+    roomTypes,
+    priceRange
+  );
+
+  return res.status(200).render('home', {
+    title: 'Home Page',
+    rooms,
+    currentPage: page,
+    totalPages: totalPages || 1,
+    sortBy,
+    starRatings,
+    roomTypes,
+    categories: categories.map((cat) => cat.get({ plain: true })),
+    minPrice,
+    maxPrice,
+    priceRange,
+  });
 };
 
 // Return a specific room

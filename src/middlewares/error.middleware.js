@@ -1,11 +1,18 @@
-const errorHandler = (err, req, res, next) => {
-  err.statusCode = err.statusCode || 500;
-  err.status = err.status || 'error';
+const { validationResult } = require('express-validator');
 
-  res.status(err.statusCode).json({
-    status: err.status,
-    message: err.message,
-  });
+const errorMiddleware = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res
+      .status(400)
+      .json({ message: 'Validation failed', errors: errors.array() });
+  }
+  next();
 };
 
-module.exports = errorHandler;
+const handleErrors = (err, req, res, next) => {
+  console.error('Server error:', err);
+  res.status(500).json({ message: 'Server error', error: err.message });
+};
+
+module.exports = { errorMiddleware, handleErrors };

@@ -1,9 +1,17 @@
 const express = require('express');
 const viewController = require('../controllers/view.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
+const { validateRoomQuery } = require('../validators/query.validator');
+const { errorMiddleware } = require('../middlewares/error.middleware');
 const viewRouter = express.Router();
 
-viewRouter.get('/', authMiddleware.isLoggedIn, viewController.home);
+viewRouter.get(
+  '/',
+  validateRoomQuery,
+  errorMiddleware,
+  authMiddleware.isLoggedIn,
+  viewController.home
+);
 viewRouter.get('/login', authMiddleware.isLoggedIn, viewController.login);
 viewRouter.get(
   '/room/:id',
