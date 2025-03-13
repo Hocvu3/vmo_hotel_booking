@@ -1,0 +1,31 @@
+openapi: 3.0.0
+info:
+  title: Hotel Booking API
+  version: 1.0.0
+  description: API Documentation for Online Room Booking System
+
+servers:
+  - url: http://localhost:3000
+    description: Local Server
+
+paths:
+  /rooms:
+    get:
+      summary: Get all rooms
+      description: Retrieve a list of available rooms
+      responses:
+        '200':
+          description: A list of rooms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    name:
+                      type: string
+                      example: 'Deluxe Room'

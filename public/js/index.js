@@ -7,8 +7,6 @@ import { createPayment } from './payment';
 import { app, messaging, requestPermission } from './firebase-client';
 import { createBooking, updateBookingSummary, getDiscount } from './booking';
 
-console.log('hello from parcel, this is only a test, we will remove soodn');
-
 // Notification
 requestPermission();
 

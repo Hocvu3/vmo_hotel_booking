@@ -27,7 +27,6 @@ const sendNotification = async (req, res) => {
   };
   try {
     const responses = await messaging.sendEachForMulticast(message);
-    console.log('Sent successfully: ', responses);
     res.json({
       success: true,
       message: 'Notification sent successfully!',

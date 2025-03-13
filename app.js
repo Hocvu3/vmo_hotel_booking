@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const YAML = require('yamljs');
 const cookieParser = require('cookie-parser');
+const swaggerUi = require('swagger-ui-express');
 const roomRouter = require('./src/routes/room.route');
 const userRouter = require('./src/routes/user.route');
 const viewRouter = require('./src/routes/view.route');
@@ -13,6 +15,9 @@ const paymentRouter = require('./src/routes/payment.route');
 const notificationRouter = require('./src/routes/notification.route');
 const { handleErrors } = require('./src/middlewares/error.middleware');
 
+// Swagger
+const swaggerDocument = YAML.load('./swagger.yaml');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Set view engine
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'src', 'views', 'pages'));
